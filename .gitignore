@@ -14,7 +14,7 @@ TouchMouseClient/.externalNativeBuild
 TouchMouseClient/.cxx
 TouchMouseClient/local.properties
 
-TouchMouseServer/target/
-TouchMouseServer/.idea/
-apps/build/
+./TouchMouseServer/target/
+./TouchMouseServer/.idea/
+./apps/build/
 
