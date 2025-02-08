@@ -16,5 +16,5 @@ TouchMouseClient/local.properties
 
 TouchMouseServer/target
 TouchMouseServer/.idea
-
+apps/build/
 
