@@ -3,18 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:weightSum="100"
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/hostIp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="80"
         android:textSize="18sp" />
 
     <Button
         android:id="@+id/removeHost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="20"
         android:text="Kliknij" />
 </LinearLayout>
