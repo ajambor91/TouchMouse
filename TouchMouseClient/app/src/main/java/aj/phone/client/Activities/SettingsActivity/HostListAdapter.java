@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,14 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import aj.phone.client.Core.DIModule;
 import aj.phone.client.IHost;
 import aj.phone.client.R;
 import aj.phone.client.Utils.Config;
 
 public class HostListAdapter extends RecyclerView.Adapter<HostListAdapter.ViewHolder> {
 
-    private final List<IHost> hostList = new ArrayList<>();
+    @Override
+    public DIModule diModule;
 
+    private int selected = RecyclerView.NO_POSITION;
+    private final List<IHost> hostList = new ArrayList<>();
+    private IHost currentHost;
     public HostListAdapter() {
         Config.getInstance().getHosts().forEach((id, host) -> {
             Log.d("Settings", String.format("Host ip: %s", id));
@@ -44,6 +50,18 @@ public class HostListAdapter extends RecyclerView.Adapter<HostListAdapter.ViewHo
         IHost data = this.hostList.get(position);
         Log.d("Settings", String.format("Bind holder with host: %s", data.getHostAddress()));
         holder.textView.setText(data.getHostAddress());
+        holder.radioButton.setChecked(position == selected);
+
+        holder.radioButton.setOnClickListener(v -> {
+
+            if (selected != position) {
+                selected = position;
+                Log.d("Settings", String.format("Selected: %s", position));
+                notifyDataSetChanged();
+            } else if (selected == position) {
+                this.currentHost = this.hostList.get(selected);
+            }
+        });
     }
 
     @Override
@@ -52,15 +70,18 @@ public class HostListAdapter extends RecyclerView.Adapter<HostListAdapter.ViewHo
 
     }
 
+    private void
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
-        Button button;
+        RadioButton radioButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
             Log.d("Settings", "Creating view holder");
             textView = itemView.findViewById(R.id.hostIp);
-            button = itemView.findViewById(R.id.removeHost);
+            radioButton = itemView.findViewById(R.id.radioButton);
+//            button = itemView.findViewById(R.id.removeHost);
         }
     }
 }

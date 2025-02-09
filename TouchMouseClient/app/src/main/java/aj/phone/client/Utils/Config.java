@@ -85,6 +85,10 @@ public class Config {
         return this.xml.getHosts();
     }
 
+    public void removeHost(IHost host) {
+        this.xml.removeHost(host);
+    }
+
     public String getSelfIp() {
         String selfIpAddr = this.convertLongToIp(this.dhcpInfo.ipAddress);
 
@@ -93,9 +97,9 @@ public class Config {
     }
 
     public String convertLongToIp(long ip) {
-        return ((ip >> 24) & 0xFF) + "." +
+        return (ip & 0xFF) + "." +
+        ((ip >> 8) & 0xFF) + "." +
                 ((ip >> 16) & 0xFF) + "." +
-                ((ip >> 8) & 0xFF) + "." +
-                (ip & 0xFF);
+                ((ip >> 24) & 0xFF);
     }
 }

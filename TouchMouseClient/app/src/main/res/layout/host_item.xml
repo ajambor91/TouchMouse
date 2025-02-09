@@ -13,10 +13,11 @@
         android:layout_weight="80"
         android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/removeHost"
-        android:layout_width="wrap_content"
+    <RadioButton
+        android:id="@+id/radioButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="20"
-        android:text="Kliknij" />
+     />
+
 </LinearLayout>

@@ -2,6 +2,9 @@ package aj.phone.client.XML;
 
 import android.util.Log;
 
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,6 +32,14 @@ public class XML {
 
         } catch (Exception e) {
             Log.e("XML", "Cannot initialize config", e);
+            throw new RuntimeException(e);
+        }
+    }
+    public void removeHost(IHost host) {
+        try {
+            XMLUtils.removeHost(host);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            Log.d("XML", "Cannot remove host", e);
             throw new RuntimeException(e);
         }
     }

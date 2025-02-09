@@ -178,6 +178,33 @@ public class XMLUtils {
         return document;
     }
 
+    public static void removeHost(IHost host)
+            throws ParserConfigurationException,
+            IOException,
+            SAXException,
+            NullPointerException
+    {
+        Document document = XMLUtils.initializeDocument();
+        Node hostNode = document.getElementById(XMLUtils.hostsTag);
+        if (hostNode == null) {
+            throw new NullPointerException("Node host does not exist");
+        }
+        NodeList hostsListNode = hostNode.getChildNodes();
+
+        if (hostsListNode == null || hostsListNode.getLength() == 0) {
+            throw new NullPointerException("Node host is null or empty");
+        }
+
+        for (int i = 0; i < hostsListNode.getLength(); i++) {
+            Element hostEl = (Element) hostsListNode.item(i);
+            String ipAddr = hostEl.getAttribute("address");
+            if (host.getHostAddress().equals(ipAddr)) {
+                hostEl.getParentNode().removeChild(hostEl);
+            }
+        }
+
+    }
+
     public static void initializeConfigOnFirstRun() throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Log.d("XML", "Initializiing config");
         Document document = XMLUtils.initializeDocument();
