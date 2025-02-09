@@ -5,6 +5,7 @@ import aj.phone.client.NetworkModule.Enums.EConnectionStatus;
 
 public class Host implements IHost {
 
+    private boolean isActive;
     private EConnectionStatus connectionStatus;
     private String appName;
     private String hostAdress;
@@ -18,6 +19,14 @@ public class Host implements IHost {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isActiveHost() {
+        return this.isActive;
+    }
+
+    public void setActiveHost(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public EConnectionStatus getConnectionStatus() {

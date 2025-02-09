@@ -125,6 +125,7 @@ public class XMLUtils {
                 String defaultHost = element.getAttributeNode("default").getValue();
                 host.setIsDefault(defaultHost.equals("true"));
                 host.setHostAddress(ip);
+                host.setActiveHost(false);
                 host.setName(name);
                 hostHashMap.put(host.getHostAddress(), host);
             }

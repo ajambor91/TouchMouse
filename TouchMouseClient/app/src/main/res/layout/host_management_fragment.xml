@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/host_management_fragment"
+    android:layout_width="match_parent"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/management_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:layout_marginBottom="40dp"
+        android:text="Host Manager"
+        />
+
+    <TextView
+        android:id="@+id/management_hostaddr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+
+     />
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/management_disconnect_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@drawable/button"
+        android:background="@drawable/button"
+        android:textColor="@android:color/white"
+        android:text="Disconnect host" />
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/management_remove_btn"
+        android:layout_width="match_parent"
+        android:backgroundTint="@drawable/button"
+        android:background="@drawable/button"
+        android:textColor="@android:color/white"
+        android:layout_height="wrap_content"
+        android:text="Remove host" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/management_back_btn"
+        android:backgroundTint="@drawable/button"
+        android:background="@drawable/button"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back" />
+</LinearLayout>

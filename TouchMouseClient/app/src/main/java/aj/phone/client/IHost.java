@@ -7,6 +7,8 @@ public interface IHost {
 
     void setName(String name);
 
+    boolean isActiveHost();
+    void setActiveHost(boolean isActive);
     String getHostAddress();
 
     void setHostAddress(String hostAdress);

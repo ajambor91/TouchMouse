@@ -10,6 +10,7 @@ import aj.phone.client.Core.ActivitiesManager;
 import aj.phone.client.NetworkModule.Enums.EConnectionStatus;
 import aj.phone.client.NetworkModule.Enums.EMouseTouch;
 import aj.phone.client.NetworkModule.Enums.EMouseTouchType;
+import aj.phone.client.NetworkModule.Enums.TCPMessageTypeEnum;
 import aj.phone.client.NetworkModule.Enums.UDPMessageTypeEnum;
 import aj.phone.client.NetworkModule.Message.BroadcastMessage;
 import aj.phone.client.NetworkModule.Message.MessageCreator;
@@ -19,11 +20,13 @@ import aj.phone.client.NetworkModule.Message.TCPMessage;
 import aj.phone.client.NetworkModule.Message.Touch;
 import aj.phone.client.NetworkModule.Message.UDPMessage;
 import aj.phone.client.NetworkModule.TCP.TCPClient;
+import aj.phone.client.NetworkModule.TCP.TCPMessageBuffer;
 import aj.phone.client.NetworkModule.UDP.UDPClient;
 import aj.phone.client.Utils.Config;
 
 public class NetworkModule extends MouseInet {
 
+    private final TCPMessageBuffer tcpMessageBuffer;
     private static NetworkModule instance;
 
     private boolean connected = false;
@@ -33,8 +36,9 @@ public class NetworkModule extends MouseInet {
     private BroadcastListener broadcastListener;
 
     private NetworkModule() {
+        this.tcpMessageBuffer = new TCPMessageBuffer();
         this.initializeSelfObject();
-        this.tcpClient = new TCPClient(this);
+        this.tcpClient = new TCPClient(this, this.tcpMessageBuffer);
         this.udpClient = new UDPClient(this);
         this.broadcastListener = new BroadcastListener(this);
     }
@@ -45,6 +49,8 @@ public class NetworkModule extends MouseInet {
         }
         return NetworkModule.instance;
     }
+
+
 
     public void setActivitiesManager(ActivitiesManager activitiesManager) {
         this.activitiesManager = activitiesManager;
@@ -77,6 +83,33 @@ public class NetworkModule extends MouseInet {
         synchronized (this.udpClient) {
             this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
             this.udpClient.notify();
+        }
+
+    }
+
+    public void disconnect() {
+        MessageCreator messageCreator = new MessageCreator(
+                this.getAppId(),
+                this.getSessionId(),
+                this.getHostAddress(),
+                this.getAddress(),
+                this.getMouseName(),
+                this.getAppName(),
+                TCPMessageTypeEnum.DISCONNECT
+                );
+        try {
+            this.tcpMessageBuffer.addMessage((TCPMessage) messageCreator.getMessage());
+            synchronized (this.tcpClient.getTcpSender()) {
+                this.tcpClient.getTcpSender().notify();
+
+            }
+            this.tcpClient.stopService();
+            this.udpClient.stopService();
+            this.tcpClient = new TCPClient(this, this.tcpMessageBuffer);
+            this.udpClient = new UDPClient(this);
+        } catch (Exception e) {
+            Log.e("Disconnect", "Disconnect error",e);
+            throw new RuntimeException(e);
         }
 
     }
@@ -135,19 +168,10 @@ public class NetworkModule extends MouseInet {
         }
     }
 
-    public void sendTCPMessage(TCPMessage message) {
-        try {
-            this.tcpClient.sendMessage(message);
-
-        } catch (IOException e) {
-            Log.d("TCP", "Message cannot send");
-        }
-    }
-
     public void reconnect() {
         this.setDisconnected();
         this.udpClient.interrupt();
-        this.tcpClient = new TCPClient(this);
+        this.tcpClient = new TCPClient(this, this.tcpMessageBuffer);
         this.udpClient = new UDPClient(this);
         this.broadcastListener = new BroadcastListener(this);
         this.broadcastListener.start();
@@ -167,6 +191,9 @@ public class NetworkModule extends MouseInet {
     }
 
     public void onDisconnectOrFail() {
+        if (activitiesManager.isOnSettings()) {
+            return;
+        }
         if (this.getConnectionStatus() == EConnectionStatus.INITIALIZED) {
             this.setConnectionStatus(EConnectionStatus.FAIL);
         } else {
@@ -196,5 +223,6 @@ public class NetworkModule extends MouseInet {
         this.setAppId(Config.getInstance().getAppId());
         this.setAppName(Config.getInstance().getAppName());
         this.setConnectionStatus(EConnectionStatus.INITIALIZED);
+        this.setActiveHost(true);
     }
 }

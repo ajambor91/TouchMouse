@@ -21,7 +21,10 @@ import aj.phone.client.NetworkModule.NetworkModule;
 import aj.phone.client.Utils.Config;
 
 public class TCPClient extends Thread {
+    private final TCPMessageBuffer tcpMessageBuffer;
+    private volatile boolean running = true;
     private final int maxTries = 10;
+    private TCPSender tcpSender;
     private final boolean connected = false;
     private final int currentTry = 0;
 
@@ -29,27 +32,32 @@ public class TCPClient extends Thread {
 
     private final NetworkModule networkModule;
 
-    public TCPClient(NetworkModule networkModule) {
+    public TCPClient(NetworkModule networkModule, TCPMessageBuffer tcpMessageBuffer) {
         this.networkModule = networkModule;
+        this.tcpMessageBuffer = tcpMessageBuffer;
     }
 
     @Override
     public void run() {
-        while (this.currentTry < this.maxTries && !this.networkModule.isConnected()) {
+        this.socket = new Socket();
+
+        while (this.running) {
             Log.d("TCP", String.format("Trying connect %s", this.maxTries));
             try {
-                sleep(1000);
-                this.socket = new Socket();
+//                sleep(1000);
                 this.socket.connect(new InetSocketAddress(this.networkModule.getHostAddress(), 9123), 5000);
                 Log.d("TCP", "Connected to host");
+                this.tcpSender = new TCPSender(socket, this.tcpMessageBuffer);
                 this.networkModule.setConnected();
                 this.initConnection();
                 this.listenForMessage(this.socket);
             } catch (SocketException socketException) {
                 if (this.networkModule.isConnected()) {
+                    this.running = false;
                     this.networkModule.onDisconnectOrFail();
                 }
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
+                this.running = false;
                 Log.d("TCP", "Cannot connect");
 
             }
@@ -61,15 +69,13 @@ public class TCPClient extends Thread {
 
     }
 
-    public void sendMessage(TCPMessage message) throws IOException {
-        MessageCreator messageCreator = new MessageCreator(message);
-        String jsonMessage = messageCreator.jsonfyMessage();
-        Log.d("TCP", String.format("Sending message: %s", jsonMessage));
-        OutputStream outputStream = this.socket.getOutputStream();
-        PrintWriter writer = new PrintWriter(outputStream, true);
-        writer.println(jsonMessage);
-        Log.d("TCP", String.format("Message send: %s", jsonMessage));
+    public void stopService() throws IOException {
+        this.socket.close();
+        this.interrupt();
+    }
 
+    public TCPSender getTcpSender() {
+        return this.tcpSender;
     }
 
     private void initConnection() throws IOException {
@@ -83,12 +89,15 @@ public class TCPClient extends Thread {
         }
 
         TCPMessage tcpMessage = (TCPMessage) messageCreator.getMessage();
-        this.sendMessage(tcpMessage);
+        this.tcpMessageBuffer.addMessage(tcpMessage);
+        synchronized (this.tcpSender) {
+            this.tcpSender.notify();
+
+        }
     }
 
     private void listenForMessage(Socket socket) throws IOException {
         InputStream inputStream = socket.getInputStream();
-
         try {
             Log.d("TCP", "Initializing TCP listening");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));

@@ -13,12 +13,11 @@ import aj.phone.client.NetworkModule.Enums.EMouseTouchType;
 import aj.phone.client.NetworkModule.Message.MessageCreator;
 import aj.phone.client.NetworkModule.Message.Touch;
 import aj.phone.client.NetworkModule.Message.UDPMessage;
-import aj.phone.client.NetworkModule.MessageBuffer;
 import aj.phone.client.NetworkModule.NetworkModule;
 
 
 public class UDPClient extends Thread {
-
+    private DatagramSocket datagramSocket;
     private final MessageBuffer messageBuffer;
     private UDPMessage message;
     private final NetworkModule networkModule;
@@ -26,6 +25,11 @@ public class UDPClient extends Thread {
     public UDPClient(NetworkModule networkModule) {
         this.messageBuffer = new MessageBuffer();
         this.networkModule = networkModule;
+    }
+
+    public void stopService() {
+        this.datagramSocket.close();
+        this.interrupt();
     }
 
     public void setMessage(UDPMessage message) {
@@ -43,7 +47,7 @@ public class UDPClient extends Thread {
     @Override
     public void run() {
         try {
-            DatagramSocket datagramSocket = new DatagramSocket();
+            this.datagramSocket = new DatagramSocket();
             InetAddress ipAddr = InetAddress.getByName(this.networkModule.getHostAddress());
             Log.d("UDP", String.format("UDP initialized with host adrress: %s", this.networkModule.getHostAddress()));
             while (true) {
@@ -51,7 +55,7 @@ public class UDPClient extends Thread {
                 if (!this.messageBuffer.isEmpty()) {
                     byte[] msg = this.parseMessage(this.messageBuffer.getMessage());
                     DatagramPacket send_packet = new DatagramPacket(msg, msg.length, ipAddr, 9123);
-                    datagramSocket.send(send_packet);
+                    this.datagramSocket.send(send_packet);
                     synchronized (this) {
 
                         this.wait();

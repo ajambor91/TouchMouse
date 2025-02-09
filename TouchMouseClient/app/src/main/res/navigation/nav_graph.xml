@@ -17,9 +17,9 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="aj.phone.client.Activities.SettingsActivity.SecondFragment"
+        android:name="aj.phone.client.Activities.SettingsActivity.HostManagementFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/host_management_fragment">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"

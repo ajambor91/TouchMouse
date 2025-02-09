@@ -1,4 +1,4 @@
-package aj.phone.client.NetworkModule;
+package aj.phone.client.NetworkModule.UDP;
 
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;

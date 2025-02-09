@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import aj.phone.client.Activities.BaseActivity;
 import aj.phone.client.Activities.ConnectionActivity.ConnectionRefreshFragment;
+import aj.phone.client.Activities.SettingsActivity.SettingsActivity;
 import aj.phone.client.R;
 
 
@@ -31,6 +32,10 @@ public class ActivitiesManager {
 
     public void setCurrentActivity(BaseActivity activity) {
         this.currentActivity = activity;
+    }
+
+    public boolean isOnSettings() {
+        return this.currentActivity instanceof SettingsActivity;
     }
 
     public void runActivity(Class<?> activityToOpen) {

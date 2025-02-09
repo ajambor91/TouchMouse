@@ -21,8 +21,7 @@ import aj.phone.client.Utils.Config;
 
 public class HostListAdapter extends RecyclerView.Adapter<HostListAdapter.ViewHolder> {
 
-    @Override
-    public DIModule diModule;
+
 
     private int selected = RecyclerView.NO_POSITION;
     private final List<IHost> hostList = new ArrayList<>();
@@ -58,9 +57,9 @@ public class HostListAdapter extends RecyclerView.Adapter<HostListAdapter.ViewHo
                 selected = position;
                 Log.d("Settings", String.format("Selected: %s", position));
                 notifyDataSetChanged();
-            } else if (selected == position) {
-                this.currentHost = this.hostList.get(selected);
             }
+            this.currentHost = this.hostList.get(selected);
+
         });
     }
 
@@ -70,7 +69,10 @@ public class HostListAdapter extends RecyclerView.Adapter<HostListAdapter.ViewHo
 
     }
 
-    private void
+    public IHost getCurrentHost() {
+        return this.currentHost;
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;

@@ -2,33 +2,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
 >
+    <TextView
+        android:layout_marginTop="30dp"
+        android:id="@+id/settings_header_text"
+        android:layout_width="match_parent"
+        android:textSize="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="Settings:" />
 
 
     <TextView
-        android:layout_marginTop="30dp"
-        android:id="@+id/textView2"
+        android:id="@+id/settings_ipaddr_text"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
         android:text="Mouse name:" />
 
     <EditText
         android:id="@+id/editTextText"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:gravity="center"
         android:ems="10"
         android:inputType="text"
         android:text="Name"
       />
     <Button
-        android:layout_marginStart="16dp"
+        android:backgroundTint="@drawable/button"
+        android:textColor="@android:color/white"
+        android:background="@drawable/button"
         android:id="@+id/button"
         android:layout_width="match_parent"
-        android:layout_marginEnd="16dp"
-        android:layout_height="36dp"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
         android:text="Change name" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -37,6 +50,16 @@
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="314dp" />
+
+    <Button
+        android:backgroundTint="@drawable/button"
+        android:textColor="@android:color/white"
+        android:background="@drawable/button"
+        android:id="@+id/button_manage_host"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage selected host" />
 
 
 </LinearLayout>
