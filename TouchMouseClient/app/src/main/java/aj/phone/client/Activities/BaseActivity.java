@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
+import aj.phone.client.Activities.HelpActivity.HelpActivity;
 import aj.phone.client.Activities.SettingsActivity.SettingsActivity;
 import aj.phone.client.Core.ActivitiesManager;
 import aj.phone.client.Core.DIModule;
@@ -55,6 +56,9 @@ public class BaseActivity extends AppCompatActivity {
         Log.d("Menu", String.valueOf(R.id.settings));
         if (item.getItemId() == R.id.settings) {
             this.activitiesManager.runActivity(SettingsActivity.class);
+            return true;
+        } else if (item.getItemId() == R.id.help) {
+            this.activitiesManager.runActivity(HelpActivity.class);
             return true;
         }
         return true;

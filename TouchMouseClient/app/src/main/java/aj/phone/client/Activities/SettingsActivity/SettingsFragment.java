@@ -152,7 +152,7 @@ public class SettingsFragment extends Fragment {
                     host = this.networkModule;
                 }
                 Fragment hostManagementFragment = new HostManagementFragment(host);
-                FragmentTransaction ft = fm.beginTransaction().replace(R.id.fragmentContainerView, hostManagementFragment);
+                FragmentTransaction ft = fm.beginTransaction().replace(R.id.settings_container_view, hostManagementFragment);
                 ft.commit();
             }
         });
@@ -164,14 +164,19 @@ public class SettingsFragment extends Fragment {
         });
     }
     private void back() {
-        if (this.networkModule.getConnectionStatus() == EConnectionStatus.CONNECTED) {
+        if (  this.activitiesManager.getPreviousActivity() instanceof ConnectionActivity &&
+                this.networkModule.getConnectionStatus() == EConnectionStatus.CONNECTED
+        ) {
             this.activitiesManager.runActivity(TouchPadActivity.class);
 
-        } else if (this.networkModule.getConnectionStatus() == EConnectionStatus.FAIL || this.networkModule.getConnectionStatus() == EConnectionStatus.DISCONNECTED){
+        } else if (this.activitiesManager.getPreviousActivity() instanceof ConnectionActivity &&
+                this.networkModule.getConnectionStatus() == EConnectionStatus.FAIL ||
+                this.networkModule.getConnectionStatus() == EConnectionStatus.DISCONNECTED
+        ){
             this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
 
         } else  {
-            this.activitiesManager.runActivity(ConnectionActivity.class);
+            this.activitiesManager.previousActivity();
 
         }
     }

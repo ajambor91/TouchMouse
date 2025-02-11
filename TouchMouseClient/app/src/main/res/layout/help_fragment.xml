@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical">
+    <TextView
+
+        android:id="@+id/help_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:layout_marginBottom="40dp"
+        android:text="@string/help"
+        />
+    <TextView
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/help_move_title"
+        android:textSize="17sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/move_title" />
+    <TextView
+        android:id="@+id/help_move_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/move_description" />
+    <TextView
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/help_tap_title"
+        android:textSize="17sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/click_title" />
+    <TextView
+        android:id="@+id/help_tap_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/click_description" />
+
+    <TextView
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/help_scroll_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/scroll_title"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/help_scroll_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/scroll_description" />
+    <TextView
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/help_rmb_title"
+        android:textSize="17sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/rmb_title" />
+    <TextView
+        android:id="@+id/help_rmb_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/rmb_description" />
+    <Button
+        android:id="@+id/help_back_btn"
+        android:background="@drawable/button"
+        android:layout_marginBottom="40dp"
+        android:textColor="@color/button"
+        android:layout_width="match_parent"
+        android:layout_marginTop="40dp"
+        android:layout_height="wrap_content"
+        android:text="Back" />
+</LinearLayout>

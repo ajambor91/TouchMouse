@@ -8,5 +8,10 @@
         android:title="@string/settings"
 
         />
+    <item
 
+        android:id="@+id/help"
+        android:title="@string/help"
+
+        />
 </menu>

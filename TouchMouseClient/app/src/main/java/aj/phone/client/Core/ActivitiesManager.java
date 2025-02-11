@@ -16,6 +16,7 @@ import aj.phone.client.R;
 public class ActivitiesManager {
 
     private static ActivitiesManager instance;
+    private BaseActivity previousActivity;
     private BaseActivity currentActivity;
     private final HashMap<String, BaseActivity> activities;
 
@@ -42,9 +43,21 @@ public class ActivitiesManager {
         if (this.currentActivity.getClass() != activityToOpen) {
             Log.d("ACT_CHANGE", "Running new activity");
             Intent intent = new Intent(this.currentActivity, activityToOpen);
+            this.previousActivity = this.currentActivity;
             this.currentActivity.startActivity(intent);
         }
 
+    }
+
+    public BaseActivity getPreviousActivity() {
+        return this.previousActivity;
+    }
+
+    public void previousActivity() {
+        if (this.previousActivity != null) {
+            Intent intent = new Intent(this.currentActivity, this.previousActivity.getClass());
+            this.currentActivity.startActivity(intent);
+        }
     }
 
     public void runActivityWithScreen(Class<?> activityToOpen) {
@@ -52,6 +65,7 @@ public class ActivitiesManager {
             Log.d("ACT_CHANGE", "Changing activity");
             Intent intent = new Intent(this.currentActivity, activityToOpen);
             intent.putExtra("frg", 1);
+            this.previousActivity = this.currentActivity;
             this.currentActivity.startActivity(intent);
         } else {
             Log.d("ACT_CHANGE", "Changing screen instead activity");

@@ -107,7 +107,7 @@ public class HostManagementFragment extends Fragment {
         FragmentManager fragmentManager = this.getActivity().getSupportFragmentManager();
         if (fragmentManager != null) {
             Fragment mainSettings = new SettingsFragment();
-            fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, mainSettings).commit();
+            fragmentManager.beginTransaction().replace(R.id.settings_container_view, mainSettings).commit();
         }
     }
 

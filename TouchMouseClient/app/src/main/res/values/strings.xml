@@ -3,8 +3,18 @@
     <string name="reconnect">Reconnect</string>
 
     <string name="connected">Connected</string>
-        <string name="quick_tap">Quick tap to press mouse button</string>
+    <string name="quick_tap">Quick tap to press mouse button</string>
     <string name="scroll">Scroll using two fingers</string>
     <string name="rmb">Hold one finger, and quick tap second to run right mouse click</string>
     <string name="settings">Settings</string>
+    <string name="help">Help</string>
+    <string name="move_title">Move</string>
+    <string name="move_description">To control the mouse cursor using your phone as a touchpad, simply slide your finger across the screen. The cursor will follow the direction and speed of your finger movements. It\'s intuitive and works just like a traditional touchpad! For more precise control, you can adjust the sensitivity settings in the app. Enjoy seamless navigation!</string>
+    <string name="scroll_description">"To scroll within an active window, use two fingers and slide them vertically (up or down) on the screen. This gesture mimics the scrolling action of a traditional touchpad, allowing you to smoothly navigate through content like web pages, documents, or lists. "</string>
+    <string name="scroll_title">Scroll\n</string>
+    <string name="rmb_title">Right button mouse action</string>
+    <string name="rmb_description">To perform a right-click action, simply hold one finger on the screen (like a long press) and then quickly tap the screen with a second finger. This gesture simulates the right-click function of a mouse, allowing you to access context menus and additional options.</string>
+    <string name="click_title">Click</string>
+    <string name="click_description">"It's a basic gesture, to perform click action quilcy tap screen. "</string>
+
 </resources>
