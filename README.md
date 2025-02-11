@@ -37,6 +37,29 @@ The mobile application will attempt to connect automatically upon startup. Howev
 In the desktop application, you can click on the app icon in the system tray to display the app menu. Here, you can view the list of connected and saved mice, disconnect or remove a selected mouse, and click on "Info" to display the app version, detected interfaces, and hostname. By right-clicking on the icon in the system tray, you can disconnect all services (TCP, UDP, and broadcast). After disconnecting, you can restart all services by clicking the "Reconnect" button.
 However if you using Windows, you can run compiled desktop .exe app from apps directory. Windows app exe is in TouchMouse.zip archive.
 
+### Connecting
+
+![Connecting](screens/mobile/connecting.jpg)
+
+On start application will start connecting process, you have to wait for host connection
+
+![Touchpad](screens/mobile/touchpad.jpg)
+
+Here is the touchpad activity. Quick tap on this screen will be mouse button down and next mouse button up event on pc. Two fingers scrolling will scroll your active window on PC. For contect menu please hold one finger and quick tap second.
+
+### Settings
+
+![Settings](screens/mobile/settings.jpg)
+
+On the settings screen you can change the mouse name, or go to host manager.
+
+![HostManager](screens/mobile/host_manager.jpg)
+
+You can disconnect a connected host or remove any PC. The removal action will also disconnect the host.
+
+![Desktop](screens/desktop/desktop.png)
+
+In the desktop application you can remove and disconnect phone touchpad. Also you can go to the information screen and see broadcast interfaces, your hostname, ip and app version.
 ## Future Enhancements
 
 Here are the planned improvements and features for TouchMouse:
