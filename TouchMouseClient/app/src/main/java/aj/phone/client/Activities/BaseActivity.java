@@ -27,12 +27,13 @@ public class BaseActivity extends AppCompatActivity {
 
     @Inject
     public DIModule diModule;
+    protected NetworkModule networkModule;
+    protected ActivitiesManager activitiesManager;
+
     @Override
     public Context getApplicationContext() {
         return super.getApplicationContext();
     }
-    protected NetworkModule networkModule;
-    protected ActivitiesManager activitiesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

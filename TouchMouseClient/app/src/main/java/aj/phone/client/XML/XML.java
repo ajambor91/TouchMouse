@@ -35,13 +35,15 @@ public class XML {
             throw new RuntimeException(e);
         }
     }
+
     public void removeHost(IHost host) {
         try {
             Log.d("HOST MANAGER", "Removing host xml");
 
             XMLUtils.removeHost(host);
             this.hostHashMap = XMLUtils.getHosts();
-        } catch (ParserConfigurationException | SAXException | IOException | TransformerException e) {
+        } catch (ParserConfigurationException | SAXException | IOException |
+                 TransformerException e) {
             Log.d("XML", "Cannot remove host", e);
             throw new RuntimeException(e);
         }

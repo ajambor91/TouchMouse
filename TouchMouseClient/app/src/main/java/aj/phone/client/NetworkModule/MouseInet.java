@@ -4,8 +4,8 @@ import java.util.UUID;
 
 public class MouseInet extends Host implements IMouseInet {
 
-    private String appId;
     private final String sessionId;
+    private String appId;
     private String address;
     private String mouseName;
 

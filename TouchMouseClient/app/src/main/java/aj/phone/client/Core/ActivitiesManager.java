@@ -16,9 +16,9 @@ import aj.phone.client.R;
 public class ActivitiesManager {
 
     private static ActivitiesManager instance;
+    private final HashMap<String, BaseActivity> activities;
     private BaseActivity previousActivity;
     private BaseActivity currentActivity;
-    private final HashMap<String, BaseActivity> activities;
 
     private ActivitiesManager() {
         this.activities = new HashMap<>();

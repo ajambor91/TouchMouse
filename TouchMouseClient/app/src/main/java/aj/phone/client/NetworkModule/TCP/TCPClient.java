@@ -6,8 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -22,14 +20,13 @@ import aj.phone.client.Utils.Config;
 
 public class TCPClient extends Thread {
     private final TCPMessageBuffer tcpMessageBuffer;
-    private volatile boolean running = true;
     private final int maxTries = 10;
-    private TCPSender tcpSender;
     private final boolean connected = false;
     private final int currentTry = 0;
-    private Socket socket;
-
     private final NetworkModule networkModule;
+    private volatile boolean running = true;
+    private TCPSender tcpSender;
+    private Socket socket;
 
     public TCPClient(NetworkModule networkModule, TCPMessageBuffer tcpMessageBuffer) {
         this.networkModule = networkModule;

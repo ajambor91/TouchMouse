@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -20,25 +19,20 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputEditText;
-
-import java.util.Objects;
-
 import javax.inject.Inject;
 
-import aj.phone.client.Activities.TouchPadActivity.TouchPadActivity;
-import aj.phone.client.NetworkModule.Enums.EConnectionStatus;
-import dagger.hilt.android.AndroidEntryPoint;
-
 import aj.phone.client.Activities.ConnectionActivity.ConnectionActivity;
+import aj.phone.client.Activities.TouchPadActivity.TouchPadActivity;
 import aj.phone.client.Core.ActivitiesManager;
 import aj.phone.client.Core.DIModule;
-import aj.phone.client.Core.HostManager;
 import aj.phone.client.IHost;
+import aj.phone.client.NetworkModule.Enums.EConnectionStatus;
 import aj.phone.client.NetworkModule.NetworkModule;
 import aj.phone.client.R;
 import aj.phone.client.Utils.Config;
 import aj.phone.client.databinding.SettingsFragmentBinding;
+import dagger.hilt.android.AndroidEntryPoint;
+
 @AndroidEntryPoint
 
 public class SettingsFragment extends Fragment {
@@ -54,6 +48,7 @@ public class SettingsFragment extends Fragment {
     private Button changeNameBtn;
     private @NonNull SettingsFragmentBinding binding;
     private HostListAdapter hostListAdapter;
+
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -101,6 +96,7 @@ public class SettingsFragment extends Fragment {
         Config.getInstance().changeMouseName(newName);
         this.networkModule.changeName(newName);
     }
+
     private void addActionOnBack() {
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
@@ -127,6 +123,7 @@ public class SettingsFragment extends Fragment {
         });
 
     }
+
     private void addButtonActions() {
         this.onChangeName();
         this.onBack();
@@ -144,8 +141,8 @@ public class SettingsFragment extends Fragment {
     private void onManageHost() {
         this.manageHostBtn.setOnClickListener(e -> {
             Log.d("Settings", "Clicked move to hostManagement");
-            FragmentManager fm =  requireActivity().getSupportFragmentManager();
-            if (this.hostListAdapter.getCurrentHost() != null){
+            FragmentManager fm = requireActivity().getSupportFragmentManager();
+            if (this.hostListAdapter.getCurrentHost() != null) {
                 Log.d("Settings", "Creating host management fragment");
                 IHost host = this.hostListAdapter.getCurrentHost();
                 if (this.hostListAdapter.getCurrentHost().getHostAddress().equals(this.networkModule.getHostAddress())) {
@@ -163,8 +160,9 @@ public class SettingsFragment extends Fragment {
             back();
         });
     }
+
     private void back() {
-        if (  this.activitiesManager.getPreviousActivity() instanceof ConnectionActivity &&
+        if (this.activitiesManager.getPreviousActivity() instanceof ConnectionActivity &&
                 this.networkModule.getConnectionStatus() == EConnectionStatus.CONNECTED
         ) {
             this.activitiesManager.runActivity(TouchPadActivity.class);
@@ -172,10 +170,10 @@ public class SettingsFragment extends Fragment {
         } else if (this.activitiesManager.getPreviousActivity() instanceof ConnectionActivity &&
                 this.networkModule.getConnectionStatus() == EConnectionStatus.FAIL ||
                 this.networkModule.getConnectionStatus() == EConnectionStatus.DISCONNECTED
-        ){
+        ) {
             this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
 
-        } else  {
+        } else {
             this.activitiesManager.previousActivity();
 
         }

@@ -17,10 +17,10 @@ import aj.phone.client.NetworkModule.NetworkModule;
 
 
 public class UDPClient extends Thread {
-    private DatagramSocket datagramSocket;
     private final MessageBuffer messageBuffer;
-    private UDPMessage message;
     private final NetworkModule networkModule;
+    private DatagramSocket datagramSocket;
+    private UDPMessage message;
 
     public UDPClient(NetworkModule networkModule) {
         this.messageBuffer = new MessageBuffer();

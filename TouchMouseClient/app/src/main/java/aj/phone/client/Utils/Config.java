@@ -15,11 +15,11 @@ public class Config {
 
     private static boolean isCreated = false;
     private static Config instance;
-    private XML xml;
     private final String dataPath;
     private final DhcpInfo dhcpInfo;
     private final File dataPathDir;
     private final Context context;
+    private XML xml;
 
     private Config(Context context, WifiManager manager) {
         this.context = context;
@@ -100,7 +100,7 @@ public class Config {
 
     public String convertLongToIp(long ip) {
         return (ip & 0xFF) + "." +
-        ((ip >> 8) & 0xFF) + "." +
+                ((ip >> 8) & 0xFF) + "." +
                 ((ip >> 16) & 0xFF) + "." +
                 ((ip >> 24) & 0xFF);
     }

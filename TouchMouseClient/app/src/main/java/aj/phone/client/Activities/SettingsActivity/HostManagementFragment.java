@@ -3,7 +3,6 @@ package aj.phone.client.Activities.SettingsActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Printer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,23 +13,21 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import aj.phone.client.Activities.ConnectionActivity.ConnectionActivity;
-import aj.phone.client.Core.ActivitiesManager;
-import aj.phone.client.R;
 
 import javax.inject.Inject;
 
+import aj.phone.client.Core.ActivitiesManager;
 import aj.phone.client.Core.DIModule;
 import aj.phone.client.Core.HostManager;
 import aj.phone.client.IHost;
 import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.R;
 import aj.phone.client.databinding.HostManagementFragmentBinding;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class HostManagementFragment extends Fragment {
+    private final IHost currentHost;
     @Inject
     public DIModule diModule;
     private NetworkModule networkModule;
@@ -39,11 +36,14 @@ public class HostManagementFragment extends Fragment {
     private Button removeButton;
     private ActivitiesManager activitiesManager;
     private Button disconnectButton;
-    private final IHost currentHost;
     private HostManagementFragmentBinding binding;
 
     private HostManager hostManager;
 
+
+    public HostManagementFragment(IHost host) {
+        this.currentHost = host;
+    }
 
     @Override
     public View onCreateView(
@@ -59,10 +59,6 @@ public class HostManagementFragment extends Fragment {
         this.initHostnameText();
         return binding.getRoot();
 
-    }
-
-    public HostManagementFragment(IHost host) {
-        this.currentHost = host;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -90,7 +86,7 @@ public class HostManagementFragment extends Fragment {
     }
 
     private void initHostnameText() {
-        this.hostnameText.setText(String.format("IP Address: %s",this.currentHost.getHostAddress()));
+        this.hostnameText.setText(String.format("IP Address: %s", this.currentHost.getHostAddress()));
 
     }
 

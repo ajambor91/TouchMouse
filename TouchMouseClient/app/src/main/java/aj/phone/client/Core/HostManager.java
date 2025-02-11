@@ -11,7 +11,8 @@ public class HostManager {
 
     private NetworkModule activeHost;
     private Host currentHost;
-    private Config config;
+    private final Config config;
+
     public HostManager(IHost host) {
         this.config = Config.getInstance();
         if (host instanceof NetworkModule) {
@@ -27,7 +28,7 @@ public class HostManager {
 
     public void removeHost() {
         this.disconnectHost();
-        if (this.activeHost !=  null) {
+        if (this.activeHost != null) {
             this.activeHost.disconnect();
         }
         Log.d("HOST MANAGER", "Removing host");

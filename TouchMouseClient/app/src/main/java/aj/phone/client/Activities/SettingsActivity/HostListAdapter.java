@@ -4,7 +4,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -14,16 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import aj.phone.client.Core.DIModule;
 import aj.phone.client.IHost;
 import aj.phone.client.R;
 import aj.phone.client.Utils.Config;
 
 public class HostListAdapter extends RecyclerView.Adapter<HostListAdapter.ViewHolder> {
 
-    private int selected = RecyclerView.NO_POSITION;
     private final List<IHost> hostList = new ArrayList<>();
+    private int selected = RecyclerView.NO_POSITION;
     private IHost currentHost;
+
     public HostListAdapter() {
         Config.getInstance().getHosts().forEach((id, host) -> {
             Log.d("Settings", String.format("Host ip: %s", id));

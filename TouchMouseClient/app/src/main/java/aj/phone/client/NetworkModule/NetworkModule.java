@@ -27,9 +27,8 @@ import aj.phone.client.Utils.Config;
 
 public class NetworkModule extends MouseInet {
 
-    private final TCPMessageBuffer tcpMessageBuffer;
     private static NetworkModule instance;
-
+    private final TCPMessageBuffer tcpMessageBuffer;
     private boolean connected = false;
     private ActivitiesManager activitiesManager;
     private UDPClient udpClient;
@@ -90,7 +89,7 @@ public class NetworkModule extends MouseInet {
             }
 
         } catch (Exception e) {
-            Log.e("Disconnect", "Disconnect error",e);
+            Log.e("Disconnect", "Disconnect error", e);
             throw new RuntimeException(e);
         }
     }
@@ -104,7 +103,7 @@ public class NetworkModule extends MouseInet {
             }
 
         } catch (Exception e) {
-            Log.e("Disconnect", "Disconnect error",e);
+            Log.e("Disconnect", "Disconnect error", e);
             throw new RuntimeException(e);
         }
 
@@ -114,7 +113,7 @@ public class NetworkModule extends MouseInet {
         Log.d("UDP", "Creating message");
         Scroll scroll = new Scroll();
         scroll.setLineScroll(scrollLine);
-;        MessageCreator messageCreator = this.createMessageCreator(UDPMessageTypeEnum.SCROLL, scroll);
+        MessageCreator messageCreator = this.createMessageCreator(UDPMessageTypeEnum.SCROLL, scroll);
         synchronized (this.udpClient) {
             this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
             this.udpClient.notify();
@@ -128,7 +127,7 @@ public class NetworkModule extends MouseInet {
         move.setX(moveX);
         move.setY(moveY);
 
-        MessageCreator messageCreator = this.createMessageCreator( UDPMessageTypeEnum.MOVE,  move);
+        MessageCreator messageCreator = this.createMessageCreator(UDPMessageTypeEnum.MOVE, move);
         synchronized (this.udpClient) {
             this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
             this.udpClient.notify();
@@ -188,8 +187,8 @@ public class NetworkModule extends MouseInet {
 
     public void initialize() {
         if (this.getConnectionStatus() == EConnectionStatus.INITIALIZED ||
-        this.getConnectionStatus() == EConnectionStatus.DISCONNECTED ||
-        this.getConnectionStatus() == EConnectionStatus.FAIL) {
+                this.getConnectionStatus() == EConnectionStatus.DISCONNECTED ||
+                this.getConnectionStatus() == EConnectionStatus.FAIL) {
             Log.d("NETWORK", "Initialized network");
             this.broadcastListener.start();
             this.setConnectionStatus(EConnectionStatus.LISTEN);
@@ -218,6 +217,7 @@ public class NetworkModule extends MouseInet {
                 udpMessageTypeEnum
         );
     }
+
     private MessageCreator createMessageCreator(TCPMessageTypeEnum tcpMessageTypeEnum) {
         return new MessageCreator(
                 this.getAppId(),
@@ -229,6 +229,7 @@ public class NetworkModule extends MouseInet {
                 tcpMessageTypeEnum
         );
     }
+
     private void runUDP() {
         Log.d("UDP", "Initilizing UDP");
 

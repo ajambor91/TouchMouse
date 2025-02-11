@@ -3,7 +3,6 @@ package aj.phone.client.Core;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import aj.phone.client.Activities.TouchPadActivity.EEvent;
 import aj.phone.client.NetworkModule.Enums.EEventStage;
 import aj.phone.client.NetworkModule.Enums.EMouseTouch;
 import aj.phone.client.NetworkModule.Enums.EMouseTouchType;

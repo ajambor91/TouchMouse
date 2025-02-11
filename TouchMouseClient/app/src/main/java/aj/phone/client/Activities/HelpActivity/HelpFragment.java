@@ -1,16 +1,15 @@
 package aj.phone.client.Activities.HelpActivity;
 
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import javax.inject.Inject;
 
@@ -80,8 +79,9 @@ public class HelpFragment extends Fragment {
             }
         });
     }
+
     private void back() {
-        if (  this.activitiesManager.getPreviousActivity() instanceof ConnectionActivity &&
+        if (this.activitiesManager.getPreviousActivity() instanceof ConnectionActivity &&
                 this.networkModule.getConnectionStatus() == EConnectionStatus.CONNECTED
         ) {
             this.activitiesManager.runActivity(TouchPadActivity.class);
@@ -89,10 +89,10 @@ public class HelpFragment extends Fragment {
         } else if (this.activitiesManager.getPreviousActivity() instanceof ConnectionActivity &&
                 this.networkModule.getConnectionStatus() == EConnectionStatus.FAIL ||
                 this.networkModule.getConnectionStatus() == EConnectionStatus.DISCONNECTED
-        ){
+        ) {
             this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
 
-        } else  {
+        } else {
             this.activitiesManager.previousActivity();
 
         }
