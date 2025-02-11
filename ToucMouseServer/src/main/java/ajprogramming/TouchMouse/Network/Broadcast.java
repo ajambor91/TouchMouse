@@ -64,7 +64,7 @@ public class Broadcast extends Thread{
 
     private void createBroadcastMessage() {
         MessageCreator messageCreator = new MessageCreator(
-                null, this.host.getSessionId(), this.host.getHostAddress(), this.host.getHostname(), "JaTouch", BroadcastMessageTypeEnum.BROADCAST
+                null, this.host.getSessionId(), this.host.getHostAddress(), this.host.getHostname(), "MouseTouch", BroadcastMessageTypeEnum.BROADCAST
         );
         this.broadcastMessage = (BroadcastMessage) messageCreator.getMessage();
     }

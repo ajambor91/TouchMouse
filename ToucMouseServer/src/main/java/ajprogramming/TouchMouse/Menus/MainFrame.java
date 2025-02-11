@@ -1,6 +1,7 @@
 package ajprogramming.TouchMouse.Menus;
 
 import ajprogramming.TouchMouse.AppConfig;
+import ajprogramming.TouchMouse.Menus.MainElementsOptions.MainFrameOptions;
 import ajprogramming.TouchMouse.Menus.OptionsFrame.OptionsDIalog;
 import ajprogramming.TouchMouse.Mouse.IMouse;
 import ajprogramming.TouchMouse.Mouse.MouseHandler;

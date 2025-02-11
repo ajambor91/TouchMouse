@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PhoneTouch</string>
+    <string name="app_name">TouchMouse</string>
     <string name="reconnect">Reconnect</string>
 
     <string name="connected">Connected</string>

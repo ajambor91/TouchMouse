@@ -1,5 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
     <style name="Theme.TouchMouse" parent="Theme.AppCompat">
         <item name="android:forceDarkAllowed">true</item>
         <item name="android:windowLightStatusBar">false</item>

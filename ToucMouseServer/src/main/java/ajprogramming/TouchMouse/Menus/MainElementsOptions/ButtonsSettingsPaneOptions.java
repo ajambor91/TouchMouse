@@ -1,11 +1,11 @@
-package ajprogramming.TouchMouse.Menus.OptionsFrame;
+package ajprogramming.TouchMouse.Menus.MainElementsOptions;
 
 import ajprogramming.TouchMouse.Menus.Shared.IElementOptions;
 
-public class OptionsDialogOptions implements IElementOptions {
-    private final int width = 450;
-    private final int height = 600;
+public class ButtonsSettingsPaneOptions implements IElementOptions {
 
+    private int height = 230;
+    private int width = 300;
     public int getWidth() {
         return this.width;
     }

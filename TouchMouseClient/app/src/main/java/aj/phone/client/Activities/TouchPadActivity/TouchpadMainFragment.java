@@ -48,6 +48,7 @@ public class TouchpadMainFragment extends Fragment {
         this.mouseMove.setNetworkModule(this.networkModule);
         Log.d("TOUCHPAD", "Initialized touchpad fragment");
         View view = inflater.inflate(R.layout.touchpad_fragment_main, container, false);
+        this.addTouchEvent(view);
         return view.getRootView();
     }
 
@@ -58,12 +59,17 @@ public class TouchpadMainFragment extends Fragment {
         NetworkModule networkModuleL = this.networkModule;
         MouseMove move = this.mouseMove;
         Log.d("TOUCHPAD", "Adding event into screen");
+
+    }
+
+    private void addTouchEvent(View view) {
         view.setOnTouchListener(new View.OnTouchListener() {
 
             public boolean onTouch(View v, MotionEvent event) {
-                return move.runMouse(event);
+                return mouseMove.runMouse(event);
             }
         });
+
     }
 
     @Override

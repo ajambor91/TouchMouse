@@ -1,5 +1,6 @@
 package ajprogramming.TouchMouse.Menus;
 
+import ajprogramming.TouchMouse.Menus.MainElementsOptions.MouseListOptions;
 import ajprogramming.TouchMouse.Mouse.IMouse;
 
 import javax.swing.*;
@@ -22,6 +23,8 @@ public class MouseList extends JList {
 
     private void initialize() {
         this.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        this.setBackground(this.mouseListOptions.getListColor());
+        this.setForeground(Color.WHITE);
         this.setPreferredSize(new Dimension(this.mouseListOptions.getWidth(), this.mouseListOptions.getHeight()));
         this.setVisible(true);
         this.addListSelectionListener(e -> {

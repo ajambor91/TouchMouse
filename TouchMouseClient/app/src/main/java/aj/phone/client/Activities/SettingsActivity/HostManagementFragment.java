@@ -3,6 +3,7 @@ package aj.phone.client.Activities.SettingsActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Printer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import aj.phone.client.Activities.ConnectionActivity.ConnectionActivity;
+import aj.phone.client.Core.ActivitiesManager;
 import aj.phone.client.R;
 
 import javax.inject.Inject;
@@ -33,15 +37,13 @@ public class HostManagementFragment extends Fragment {
     private Button backButton;
     private TextView hostnameText;
     private Button removeButton;
-
+    private ActivitiesManager activitiesManager;
     private Button disconnectButton;
     private final IHost currentHost;
-    private HostManager hostManager;
-    public HostManagementFragment(IHost host) {
-        this.currentHost = host;
-
-    }
     private HostManagementFragmentBinding binding;
+
+    private HostManager hostManager;
+
 
     @Override
     public View onCreateView(
@@ -49,28 +51,23 @@ public class HostManagementFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         this.networkModule = this.diModule.getNetworkModule();
-
+        this.activitiesManager = this.diModule.getActivitiesManager();
         Log.d("HOST", "Host management initialized");
-        this.hostManager = new HostManager(this.currentHost);
         binding = HostManagementFragmentBinding.inflate(inflater, container, false);
-        this.hostnameText = binding.managementHostaddr;
-        this.backButton = binding.managementBackBtn;
-        this.removeButton = binding.managementRemoveBtn;
-        this.disconnectButton = binding.managementDisconnectBtn;
-
-        this.hostnameText.setText(String.format("IP Address: %s",this.currentHost.getHostAddress()));
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                back();
-            }
-        });
+        this.initHostManager();
+        this.setElements();
+        this.initHostnameText();
         return binding.getRoot();
 
     }
 
+    public HostManagementFragment(IHost host) {
+        this.currentHost = host;
+    }
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.addActionOnBackAction();
         this.initButtons();
     }
 
@@ -78,6 +75,32 @@ public class HostManagementFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void initHostManager() {
+        this.hostManager = new HostManager(this.currentHost);
+
+    }
+
+    private void setElements() {
+        this.hostnameText = binding.managementHostaddr;
+        this.backButton = binding.managementBackBtn;
+        this.removeButton = binding.managementRemoveBtn;
+        this.disconnectButton = binding.managementDisconnectBtn;
+    }
+
+    private void initHostnameText() {
+        this.hostnameText.setText(String.format("IP Address: %s",this.currentHost.getHostAddress()));
+
+    }
+
+    private void addActionOnBackAction() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                back();
+            }
+        });
     }
 
     private void back() {
@@ -96,14 +119,20 @@ public class HostManagementFragment extends Fragment {
     }
 
     private void diconnectHost() {
-        this.disconnectButton.setOnClickListener(e -> {
-            this.hostManager.disconnectHost();
-        });
+        if (this.currentHost.isActiveHost()) {
+            this.disconnectButton.setOnClickListener(e -> {
+                this.hostManager.disconnectHost();
+            });
+        } else {
+            this.disconnectButton.setEnabled(false);
+        }
+
     }
 
     private void removeHost() {
         this.removeButton.setOnClickListener(e -> {
             this.hostManager.removeHost();
+            back();
         });
     }
 

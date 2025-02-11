@@ -1,5 +1,7 @@
 package ajprogramming.TouchMouse.Menus;
 
+import ajprogramming.TouchMouse.Menus.MainElementsOptions.MouseListLabelOptions;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,6 +17,7 @@ public class MouseListLabel extends JLabel {
 
     private void initialize() {
         this.setText("Connected touches");
+        this.setForeground(Color.WHITE);
         this.setPreferredSize(new Dimension(this.mouseListLabelOptions.getWidth(), this.mouseListLabelOptions.getHeight()));
         this.setHorizontalAlignment(SwingConstants.LEFT);
         this.setAlignmentX(Component.RIGHT_ALIGNMENT);

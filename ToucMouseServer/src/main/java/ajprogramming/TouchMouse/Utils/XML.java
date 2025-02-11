@@ -41,6 +41,15 @@ public class XML {
         }
     }
 
+    public void changeMouseName(IMouse mouse) {
+        try {
+            XMLUtils.changeMouseName(mouse);
+        } catch (ParserConfigurationException | IOException | TransformerException | SAXException e) {
+            Tray.getInstance().showMessage("Warning", String.format("Cannot change mouse name: %s, address: %s", mouse.getMouseName(), mouse.getMouseAddress()));
+
+        }
+    }
+
     public HashMap<String, IMouse> getMice() {
         try {
             return XMLUtils.getMice();

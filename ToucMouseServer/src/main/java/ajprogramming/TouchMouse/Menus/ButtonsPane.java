@@ -1,5 +1,6 @@
 package ajprogramming.TouchMouse.Menus;
 
+import ajprogramming.TouchMouse.Menus.MainElementsOptions.ButtonsPaneOptions;
 import ajprogramming.TouchMouse.Menus.Shared.DefaultPane;
 
 import javax.swing.*;

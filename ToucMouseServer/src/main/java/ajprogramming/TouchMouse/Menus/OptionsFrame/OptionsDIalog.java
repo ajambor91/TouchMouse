@@ -1,6 +1,7 @@
 package ajprogramming.TouchMouse.Menus.OptionsFrame;
 
 import ajprogramming.TouchMouse.Menus.MainFrame;
+import ajprogramming.TouchMouse.Menus.OptionsFrame.OptionsElementsOptions.OptionsDialogOptions;
 
 import javax.swing.*;
 import java.awt.*;

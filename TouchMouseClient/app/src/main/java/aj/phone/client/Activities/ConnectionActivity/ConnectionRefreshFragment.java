@@ -29,8 +29,6 @@ public class ConnectionRefreshFragment extends Fragment {
     public ConnectionRefreshFragment() throws Exception {
 
     }
-
-
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,

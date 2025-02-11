@@ -18,7 +18,9 @@ public class MouseHandler {
     private HashMap<String, IMouse> mouseHashMap;
     private MainFrame mainFrame;
     private final LoggerEx loggerEx;
+    private final XML xml;
     public MouseHandler(IHost host) {
+        this.xml = new XML();
         this.host = host;
         this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
         this.initialize();
@@ -40,8 +42,7 @@ public class MouseHandler {
             Mouse initMouse = new Mouse(clientSocket, this, tcpMessage, this.host);
 
             if (mouse == null) {
-                XML xml = new XML();
-                xml.addMouse(initMouse);
+                this.xml.addMouse(initMouse);
                 this.loggerEx.info("Mouse added", tcpMessage.getMouseId());
 
             }
@@ -53,6 +54,15 @@ public class MouseHandler {
             this.refreshMouseList();
 
         }
+    }
+
+    public void overrideMouse(Mouse mouse) {
+        IMouse mouseFromMap = this.mouseHashMap.get(mouse.getMouseId());
+        if (mouseFromMap == null) {
+            this.loggerEx.warning("Mouse override failed", mouse.getMouseId());
+            return;
+        }
+        this.mouseHashMap.put(mouse.getMouseID(), mouse);
     }
 
     public void reconnect(TCPMessage tcpMessage, Socket clientSocket) {
@@ -90,8 +100,7 @@ public class MouseHandler {
         if (mouseFromMap != null) {
             this.mouseHashMap.remove(mouse.getMouseID());
             mouseFromMap.removeMouse();
-            XML xml = new XML();
-            xml.removeMouse(mouseFromMap);
+            this.xml.removeMouse(mouseFromMap);
             this.loggerEx.info("Mouse removed", mouse.getMouseID());
 
             this.refreshMouseList();

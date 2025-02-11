@@ -42,7 +42,7 @@ public class TCPService extends Thread{
                 MessageCreator messageCreator = new MessageCreator(reader.readLine(), MessageTypes.TCP);
                 this.loggerEx.info("Received TCP message", messageCreator.jsonfyMessage());
                 TCPMessage message = (TCPMessage) messageCreator.getMessage();
-                this.processInitializationMessage(message, this.socket);
+                this.processTCPMessage(message, this.socket);
             }
         } catch (IOException e) {
             this.loggerEx.warning("TCP", e.getMessage());
@@ -74,7 +74,7 @@ public class TCPService extends Thread{
 
     }
 
-    private void processInitializationMessage(TCPMessage tcpMessage, Socket socket) {
+    private void processTCPMessage(TCPMessage tcpMessage, Socket socket) {
         if (tcpMessage.getType() == TCPMessageTypeEnum.CONNECTION) {
             this.mouseHandler.addMouse(tcpMessage, socket);
         } else if (tcpMessage.getType() == TCPMessageTypeEnum.RECONNECT) {

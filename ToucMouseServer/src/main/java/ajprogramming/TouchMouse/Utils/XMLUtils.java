@@ -32,7 +32,7 @@ import javax.xml.transform.stream.StreamResult;
 
 public class XMLUtils {
     private final static String appName = "TouchMouse";
-    public final static String defaultMouseName = "JaTouch";
+    public final static String defaultMouseName = "MouseTouch";
     private final static String configDirName = "config";
     private final static String configFileName = "/app_data.xml";
     private final static String mouseAddressTagName = "mouseAddress";
@@ -152,10 +152,26 @@ public class XMLUtils {
         for (int i = 0;  i < mice.getLength(); i++) {
             Element mouseEl = (Element) mice.item(i);
             String mouseId = mouseEl.getAttribute(XMLUtils.mouseIdTagName);
-            System.out.printf("MOUSEID %s", mouseId);
-            System.out.printf("MOUSE ID TO REMOVE %s", mouseToRemove.getMouseID());
+
             if (mouseToRemove.getMouseID().equals(mouseId)) {
                 mouseEl.getParentNode().removeChild(mouseEl);
+                break;
+            }
+        }
+        XMLUtils.saveFile(document);
+    }
+
+    public static void changeMouseName(IMouse mouseToChange) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+        Document document = XMLUtils.initializeDocument();
+        NodeList mice = document.getElementsByTagName(XMLUtils.miceTagName).item(0).getChildNodes();
+        for (int i = 0;  i < mice.getLength(); i++) {
+            Element mouseEl = (Element) mice.item(i);
+            String mouseId = mouseEl.getAttribute(XMLUtils.mouseIdTagName);
+
+            if (mouseToChange.getMouseID().equals(mouseId)) {
+                Attr nameAttr = mouseEl.getAttributeNode(XMLUtils.mouseNameTagName);
+                nameAttr.setValue(mouseToChange.getMouseName());
+                mouseEl.setAttributeNode(nameAttr);
                 break;
             }
         }

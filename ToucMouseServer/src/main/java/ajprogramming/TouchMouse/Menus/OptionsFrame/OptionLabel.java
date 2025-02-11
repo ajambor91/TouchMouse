@@ -1,5 +1,7 @@
 package ajprogramming.TouchMouse.Menus.OptionsFrame;
 
+import ajprogramming.TouchMouse.Menus.OptionsFrame.OptionsElementsOptions.OptionLabelOptions;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,6 +17,7 @@ public class OptionLabel extends JLabel {
 
     private void initialize() {
         Dimension dimension = new Dimension(this.optionLabelOptions.getWidth(), this.optionLabelOptions.getHeight());
+        this.setForeground(Color.WHITE);
         this.setPreferredSize(dimension);
         this.setSize(dimension);
         this.setVisible(true);

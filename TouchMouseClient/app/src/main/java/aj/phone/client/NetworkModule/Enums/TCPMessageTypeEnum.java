@@ -5,6 +5,7 @@ public enum TCPMessageTypeEnum {
     DISCONNECT("disconnect"),
 
     RECONNECT("reconnect"),
+    NAME_CHANGE("name-change"),
     RECONNECT_ANSWER("reconnect-answer");
 
 

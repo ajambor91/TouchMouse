@@ -13,32 +13,16 @@ import aj.phone.client.NetworkModule.NetworkModule;
 public class MouseMove {
     private static MouseMove instance;
     private EEventStage eventStage = EEventStage.INITIALIZED;
-    private EEvent eventType;
     private NetworkModule networkModule;
     private float deltaX = 0;
     private float deltaY = 0;
-    private final float endX = 0;
-    private final float endY = 0;
     private float startY = 0;
     private float startX = 0;
     private long touchStart = 0;
-    private long moveStart = 0;
-    private long touchEnd = 0;
-    private boolean isEventStarted = false;
-    private long touchGapStart = 0;
-    private long touchGapEnd = 0;
-    private final boolean isBlocked = false;
-    private final long secondTouchStart = 0;
-    private final long seondTouchEnd = 0;
     private boolean lpmButton = false;
     private boolean isPPMDown = false;
     private boolean isLPMDown = false;
-    private final int lastDeltaX = 0;
-    private final int lastDeltaY = 0;
 
-    private MouseMove() {
-
-    }
 
     public static MouseMove getInstance() {
         if (MouseMove.instance == null) {
@@ -60,30 +44,21 @@ public class MouseMove {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 this.touchStart = System.currentTimeMillis();
-
                 startX = event.getX();
                 startY = event.getY();
-
                 Log.d("Touch", String.format("Touch DOWNDetected touch, with clicks count: %s, LPM status: %b", event.getPointerCount(), this.isLPMDown));
-                this.touchGapEnd = System.currentTimeMillis();
                 return true;
             case MotionEvent.ACTION_MOVE:
-                this.moveStart = System.currentTimeMillis();
                 this.onMove(event);
                 return true;
             case MotionEvent.ACTION_POINTER_DOWN:
                 this.onPPMDown(event);
-
                 return true;
-
-
             case MotionEvent.ACTION_POINTER_UP:
                 this.onPPMUp(event);
                 return true;
-
             case MotionEvent.ACTION_UP:
                 this.onLPMUp(event);
-
                 return true;
 
         }
@@ -171,19 +146,14 @@ public class MouseMove {
     }
 
     private void onLPMUp(MotionEvent event) {
-        touchEnd = System.currentTimeMillis();
         Log.d("Touch", String.format("Flags status, stage: %s, lpmStatus: %b", this.eventStage.getStage(), this.lpmButton));
         if (EEventStage.PROGRESS == this.eventStage || EEventStage.MOVING == this.eventStage && this.isLPMDown) {
-            this.touchGapStart = System.currentTimeMillis();
-
             Log.d("Touch", "Touch screen");
-            isEventStarted = false;
 
         }
         this.networkModule.setTouchUDPMessage(EMouseTouch.SINGLE_LPM, EMouseTouchType.UP);
         lpmButton = false;
         this.isLPMDown = false;
-
         this.eventStage = EEventStage.FINISHED;
 
     }

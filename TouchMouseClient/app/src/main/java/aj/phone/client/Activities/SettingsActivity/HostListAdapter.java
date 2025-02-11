@@ -21,8 +21,6 @@ import aj.phone.client.Utils.Config;
 
 public class HostListAdapter extends RecyclerView.Adapter<HostListAdapter.ViewHolder> {
 
-
-
     private int selected = RecyclerView.NO_POSITION;
     private final List<IHost> hostList = new ArrayList<>();
     private IHost currentHost;
@@ -37,7 +35,6 @@ public class HostListAdapter extends RecyclerView.Adapter<HostListAdapter.ViewHo
     @Override
     public HostListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d("Settings", "View holder creating");
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.host_item, parent, false);
 
         return new ViewHolder(view);

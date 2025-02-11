@@ -1,5 +1,6 @@
 package aj.phone.client.Activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -25,17 +26,18 @@ public class BaseActivity extends AppCompatActivity {
 
     @Inject
     public DIModule diModule;
-
+    @Override
+    public Context getApplicationContext() {
+        return super.getApplicationContext();
+    }
     protected NetworkModule networkModule;
     protected ActivitiesManager activitiesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.activitiesManager = this.diModule.getActivitiesManager();
         this.activitiesManager.setCurrentActivity(this);
-
         this.networkModule = this.diModule.getNetworkModule();
         this.networkModule.setActivitiesManager(this.activitiesManager);
 
@@ -61,6 +63,7 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
         return true;
     }
 }

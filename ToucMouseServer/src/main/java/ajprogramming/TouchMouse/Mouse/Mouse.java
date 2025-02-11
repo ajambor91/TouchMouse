@@ -9,6 +9,8 @@ import ajprogramming.TouchMouse.Network.MessageCreator;
 import ajprogramming.TouchMouse.Network.Messages.TCPMessage;
 import ajprogramming.TouchMouse.Network.Messages.UDPMessage;
 import ajprogramming.TouchMouse.Tray.Tray;
+import ajprogramming.TouchMouse.Utils.LoggerEx;
+import ajprogramming.TouchMouse.Utils.XML;
 
 import java.io.*;
 import java.net.Socket;
@@ -20,6 +22,7 @@ public class Mouse extends Thread implements IMouse{
     private MouseMove mouseMove;
     private  String mouseAddress;
     private  String sessionId;
+    private final LoggerEx loggerEx;
     private  Socket tcpSocket;
     private String mouseName;
     private  String mouseId;
@@ -28,6 +31,7 @@ public class Mouse extends Thread implements IMouse{
 
     public Mouse(Socket tcpSocket, MouseHandler mouseHandler, TCPMessage tcpMessage, IHost host) {
         try {
+            this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
             this.messageBuffer = new MessageBuffer();
             this.mouseMove = new MouseMove(this.messageBuffer);
             this.mouseMove.start();
@@ -51,6 +55,8 @@ public class Mouse extends Thread implements IMouse{
         }
 
     }
+
+
 
     public void addMsg(UDPMessage udpMessage) {
         this.messageBuffer.put(udpMessage);
@@ -132,6 +138,7 @@ public class Mouse extends Thread implements IMouse{
             this.isConnected = true;
             while ((incomingMessage = reader.readLine()) != null) {
                 MessageCreator messageCreator = new MessageCreator(incomingMessage, MessageTypes.TCP);
+                this.loggerEx.info("Mouse received TCP message", messageCreator.jsonfyMessage());
                 this.processTCPMessage((TCPMessage) messageCreator.getMessage());
                 this.isConnected = true;
             }
@@ -212,9 +219,26 @@ public class Mouse extends Thread implements IMouse{
     }
 
     private void processMessage(TCPMessage tcpMessage) {
-            this.sendTCPMessage(tcpMessage);
+            switch (tcpMessage.getType()) {
+                case DISCONNECT:
+                    this.disconnectMouse();
+                    break;
+                case NAME_CHANGE:
+                    this.changeName(tcpMessage);
+                    break;
+                default:
+                    this.sendTCPMessage(tcpMessage);
+                    break;
+            }
     }
 
+    private void changeName(TCPMessage tcpMessage) {
+        this.setMouseName(tcpMessage.getMouseName());
+        XML xml = new XML();
+        xml.changeMouseName(this);
+        this.mouseHandler.overrideMouse(this);
+
+    }
 
     private void sendDisconnectMessage() {
 

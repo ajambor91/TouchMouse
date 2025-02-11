@@ -2,7 +2,7 @@
     android:id="@+id/host_management_fragment"
     android:layout_width="match_parent"
     android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
+    android:layout_marginEnd="36dp"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@drawable/button"
         android:background="@drawable/button"
-        android:textColor="@android:color/white"
+        android:textColor="@drawable/button"
         android:text="Disconnect host" />
 
     <Button
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:backgroundTint="@drawable/button"
         android:background="@drawable/button"
-        android:textColor="@android:color/white"
+        android:textColor="@drawable/button"
         android:layout_height="wrap_content"
         android:text="Remove host" />
     <View
@@ -54,7 +54,7 @@
         android:id="@+id/management_back_btn"
         android:backgroundTint="@drawable/button"
         android:background="@drawable/button"
-        android:textColor="@android:color/white"
+        android:textColor="@drawable/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Back" />

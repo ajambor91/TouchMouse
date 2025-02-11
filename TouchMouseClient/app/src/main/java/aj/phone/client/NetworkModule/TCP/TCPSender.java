@@ -41,7 +41,7 @@ public class TCPSender extends Thread {
                     }
 
             } catch (InterruptedException | IOException e) {
-                    throw new RuntimeException(e);
+                    Log.d("TCP Sender", "Host diconnected");
                 }
         }
     }

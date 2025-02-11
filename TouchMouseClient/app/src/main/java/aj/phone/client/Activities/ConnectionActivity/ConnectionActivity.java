@@ -1,14 +1,18 @@
 package aj.phone.client.Activities.ConnectionActivity;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.ThemeUtils;
+import androidx.core.content.res.ResourcesCompat;
 
 import javax.inject.Inject;
 
 import aj.phone.client.Activities.BaseActivity;
 import aj.phone.client.Core.ActivitiesManager;
-import aj.phone.client.Core.DIModule;
 import aj.phone.client.R;
 import aj.phone.client.databinding.ConnectionActivityBinding;
 
@@ -16,20 +20,20 @@ public class ConnectionActivity extends BaseActivity {
 
     @Inject
     public ActivitiesManager activitiesManager;
-    @Inject
-    public DIModule diModule;
+
     private ConnectionActivityBinding binding;
 
     @Override
-    public Context getApplicationContext() {
-        return super.getApplicationContext();
+    public void onDestroy() {
+        super.onDestroy();
+        this.binding = null;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ConnectionActivityBinding.inflate(getLayoutInflater());
-
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
         Log.d("APP_MAIN", "Initialized main activity");
         Bundle intentFragment = getIntent().getExtras();
@@ -54,12 +58,6 @@ public class ConnectionActivity extends BaseActivity {
             this.initMainApp();
         }
 
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.binding = null;
     }
 
     private void initReconnect() throws Exception {

@@ -86,6 +86,8 @@ public class Config {
     }
 
     public void removeHost(IHost host) {
+        Log.d("HOST MANAGER", "Removing host, config");
+
         this.xml.removeHost(host);
     }
 

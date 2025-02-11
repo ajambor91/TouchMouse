@@ -1,5 +1,6 @@
 package ajprogramming.TouchMouse.Menus.OptionsFrame;
 
+import ajprogramming.TouchMouse.Menus.OptionsFrame.OptionsElementsOptions.MainOptionsPaneOptions;
 import ajprogramming.TouchMouse.Menus.Shared.DefaultPane;
 import ajprogramming.TouchMouse.Menus.Shared.DefaultScrollPane;
 import ajprogramming.TouchMouse.Network.Utils.NetworkUtils;

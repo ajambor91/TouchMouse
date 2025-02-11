@@ -27,7 +27,6 @@ public class TCPClient extends Thread {
     private TCPSender tcpSender;
     private final boolean connected = false;
     private final int currentTry = 0;
-
     private Socket socket;
 
     private final NetworkModule networkModule;
@@ -44,7 +43,6 @@ public class TCPClient extends Thread {
         while (this.running) {
             Log.d("TCP", String.format("Trying connect %s", this.maxTries));
             try {
-//                sleep(1000);
                 this.socket.connect(new InetSocketAddress(this.networkModule.getHostAddress(), 9123), 5000);
                 Log.d("TCP", "Connected to host");
                 this.tcpSender = new TCPSender(socket, this.tcpMessageBuffer);

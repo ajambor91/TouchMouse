@@ -1,4 +1,4 @@
-package ajprogramming.TouchMouse.Menus;
+package ajprogramming.TouchMouse.Menus.MainElementsOptions;
 
 import ajprogramming.TouchMouse.Menus.Shared.IElementOptions;
 

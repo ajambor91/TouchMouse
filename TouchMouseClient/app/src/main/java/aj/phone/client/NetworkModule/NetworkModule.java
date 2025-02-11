@@ -18,6 +18,7 @@ import aj.phone.client.NetworkModule.Message.Move;
 import aj.phone.client.NetworkModule.Message.Scroll;
 import aj.phone.client.NetworkModule.Message.TCPMessage;
 import aj.phone.client.NetworkModule.Message.Touch;
+import aj.phone.client.NetworkModule.Message.UDPAction;
 import aj.phone.client.NetworkModule.Message.UDPMessage;
 import aj.phone.client.NetworkModule.TCP.TCPClient;
 import aj.phone.client.NetworkModule.TCP.TCPMessageBuffer;
@@ -50,8 +51,6 @@ public class NetworkModule extends MouseInet {
         return NetworkModule.instance;
     }
 
-
-
     public void setActivitiesManager(ActivitiesManager activitiesManager) {
         this.activitiesManager = activitiesManager;
     }
@@ -70,16 +69,7 @@ public class NetworkModule extends MouseInet {
         Touch touch = new Touch();
         touch.setClickType(mouseTouchType);
         touch.setClick(mouseTouch);
-        MessageCreator messageCreator = new MessageCreator(
-                this.getAppId(),
-                this.getSessionId(),
-                this.getHostAddress(),
-                Config.getInstance().getSelfIp(),
-                this.getMouseName(),
-                this.getAppName(),
-                touch,
-                UDPMessageTypeEnum.TOUCH
-        );
+        MessageCreator messageCreator = this.createMessageCreator(UDPMessageTypeEnum.TOUCH, touch);
         synchronized (this.udpClient) {
             this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
             this.udpClient.notify();
@@ -87,26 +77,29 @@ public class NetworkModule extends MouseInet {
 
     }
 
-    public void disconnect() {
-        MessageCreator messageCreator = new MessageCreator(
-                this.getAppId(),
-                this.getSessionId(),
-                this.getHostAddress(),
-                this.getAddress(),
-                this.getMouseName(),
-                this.getAppName(),
-                TCPMessageTypeEnum.DISCONNECT
-                );
+    public void changeName(String newName) {
+        this.setMouseName(newName);
+        MessageCreator messageCreator = this.createMessageCreator(TCPMessageTypeEnum.NAME_CHANGE);
         try {
             this.tcpMessageBuffer.addMessage((TCPMessage) messageCreator.getMessage());
             synchronized (this.tcpClient.getTcpSender()) {
                 this.tcpClient.getTcpSender().notify();
-
             }
-            this.tcpClient.stopService();
-            this.udpClient.stopService();
-            this.tcpClient = new TCPClient(this, this.tcpMessageBuffer);
-            this.udpClient = new UDPClient(this);
+
+        } catch (Exception e) {
+            Log.e("Disconnect", "Disconnect error",e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void disconnect() {
+        MessageCreator messageCreator = this.createMessageCreator(TCPMessageTypeEnum.DISCONNECT);
+        try {
+            this.tcpMessageBuffer.addMessage((TCPMessage) messageCreator.getMessage());
+            synchronized (this.tcpClient.getTcpSender()) {
+                this.tcpClient.getTcpSender().notify();
+            }
+
         } catch (Exception e) {
             Log.e("Disconnect", "Disconnect error",e);
             throw new RuntimeException(e);
@@ -118,16 +111,7 @@ public class NetworkModule extends MouseInet {
         Log.d("UDP", "Creating message");
         Scroll scroll = new Scroll();
         scroll.setLineScroll(scrollLine);
-        MessageCreator messageCreator = new MessageCreator(
-                this.getAppId(),
-                this.getSessionId(),
-                this.getHostAddress(),
-                Config.getInstance().getSelfIp(),
-                this.getMouseName(),
-                this.getAppName(),
-                scroll,
-                UDPMessageTypeEnum.SCROLL
-        );
+;        MessageCreator messageCreator = this.createMessageCreator(UDPMessageTypeEnum.SCROLL, scroll);
         synchronized (this.udpClient) {
             this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
             this.udpClient.notify();
@@ -141,31 +125,13 @@ public class NetworkModule extends MouseInet {
         move.setX(moveX);
         move.setY(moveY);
 
-        MessageCreator messageCreator = new MessageCreator(
-                this.getAppId(),
-                this.getSessionId(),
-                this.getHostAddress(),
-                Config.getInstance().getSelfIp(),
-                this.getMouseName(),
-                this.getAppName(),
-                move,
-                UDPMessageTypeEnum.MOVE
-        );
+        MessageCreator messageCreator = this.createMessageCreator( UDPMessageTypeEnum.MOVE,  move);
         synchronized (this.udpClient) {
             this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
             this.udpClient.notify();
         }
 
 
-    }
-
-    private void runUDP() {
-        Log.d("UDP", "Initilizing UDP");
-
-        if (this.connected) {
-            Log.d("UDP", "Starting UDP");
-            this.udpClient.start();
-        }
     }
 
     public void reconnect() {
@@ -191,17 +157,25 @@ public class NetworkModule extends MouseInet {
     }
 
     public void onDisconnectOrFail() {
-        if (activitiesManager.isOnSettings()) {
-            return;
+
+        try {
+            if (activitiesManager.isOnSettings()) {
+                return;
+            }
+            this.udpClient.stopService();
+            this.broadcastListener.interrupt();
+            this.tcpClient.stopService();
+            if (this.getConnectionStatus() == EConnectionStatus.INITIALIZED) {
+                this.setConnectionStatus(EConnectionStatus.FAIL);
+            } else {
+                this.setConnectionStatus(EConnectionStatus.DISCONNECTED);
+            }
+            this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
+        } catch (IOException e) {
+            Log.e("NETWORK", "Cannot interrupt TCP", e);
+            throw new RuntimeException(e);
         }
-        if (this.getConnectionStatus() == EConnectionStatus.INITIALIZED) {
-            this.setConnectionStatus(EConnectionStatus.FAIL);
-        } else {
-            this.setConnectionStatus(EConnectionStatus.DISCONNECTED);
-        }
-        this.broadcastListener.interrupt();
-        this.tcpClient.interrupt();
-        this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
+
     }
 
     public void processNewConnection() {
@@ -210,9 +184,12 @@ public class NetworkModule extends MouseInet {
     }
 
     public void initialize() {
-        if (!this.connected) {
+        if (this.getConnectionStatus() == EConnectionStatus.INITIALIZED ||
+        this.getConnectionStatus() == EConnectionStatus.DISCONNECTED ||
+        this.getConnectionStatus() == EConnectionStatus.FAIL) {
             Log.d("NETWORK", "Initialized network");
             this.broadcastListener.start();
+            this.setConnectionStatus(EConnectionStatus.LISTEN);
         }
     }
 
@@ -224,5 +201,37 @@ public class NetworkModule extends MouseInet {
         this.setAppName(Config.getInstance().getAppName());
         this.setConnectionStatus(EConnectionStatus.INITIALIZED);
         this.setActiveHost(true);
+    }
+
+    private MessageCreator createMessageCreator(UDPMessageTypeEnum udpMessageTypeEnum, UDPAction action) {
+        return new MessageCreator(
+                this.getAppId(),
+                this.getSessionId(),
+                this.getHostAddress(),
+                Config.getInstance().getSelfIp(),
+                this.getMouseName(),
+                this.getAppName(),
+                action,
+                udpMessageTypeEnum
+        );
+    }
+    private MessageCreator createMessageCreator(TCPMessageTypeEnum tcpMessageTypeEnum) {
+        return new MessageCreator(
+                this.getAppId(),
+                this.getSessionId(),
+                this.getHostAddress(),
+                this.getAddress(),
+                this.getMouseName(),
+                this.getAppName(),
+                tcpMessageTypeEnum
+        );
+    }
+    private void runUDP() {
+        Log.d("UDP", "Initilizing UDP");
+
+        if (this.connected) {
+            Log.d("UDP", "Starting UDP");
+            this.udpClient.start();
+        }
     }
 }

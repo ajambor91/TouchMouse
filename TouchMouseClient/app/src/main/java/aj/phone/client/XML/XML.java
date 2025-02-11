@@ -37,8 +37,11 @@ public class XML {
     }
     public void removeHost(IHost host) {
         try {
+            Log.d("HOST MANAGER", "Removing host xml");
+
             XMLUtils.removeHost(host);
-        } catch (ParserConfigurationException | SAXException | IOException e) {
+            this.hostHashMap = XMLUtils.getHosts();
+        } catch (ParserConfigurationException | SAXException | IOException | TransformerException e) {
             Log.d("XML", "Cannot remove host", e);
             throw new RuntimeException(e);
         }

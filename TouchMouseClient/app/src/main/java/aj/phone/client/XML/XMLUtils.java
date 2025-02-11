@@ -30,12 +30,12 @@ import aj.phone.client.Utils.Config;
 import aj.phone.client.Utils.DirUtils;
 
 public class XMLUtils {
-    public final static String defaultMouseName = "JaTouch";
+    public final static String defaultMouseName = "MouseTouch";
     public final static String defaultOptionAttr = "value";
     public final static String mouseNameTag = "name";
     public final static String uniqueTag = "app-id";
     public final static String appNameTag = "app-name";
-    private final static String appName = "JaTouch";
+    private final static String appName = "MouseTouch";
     private final static String path = Config.getInstance().getDataPath() + "/config";
     private final static String configDirName = "config";
     private final static String configFileName = "/app_data.xml";
@@ -183,8 +183,9 @@ public class XMLUtils {
             throws ParserConfigurationException,
             IOException,
             SAXException,
-            NullPointerException
-    {
+            NullPointerException, TransformerException {
+        Log.d("HOST MANAGER", "Removing host XMLUtils");
+
         Document document = XMLUtils.initializeDocument();
         Node hostNode = document.getElementById(XMLUtils.hostsTag);
         if (hostNode == null) {
@@ -199,11 +200,13 @@ public class XMLUtils {
         for (int i = 0; i < hostsListNode.getLength(); i++) {
             Element hostEl = (Element) hostsListNode.item(i);
             String ipAddr = hostEl.getAttribute("address");
+            Log.d("HOST MANAGER", String.format("Removing host, IP addr: %s, host to remove addr: %s", ipAddr, host.getHostAddress()));
+
             if (host.getHostAddress().equals(ipAddr)) {
                 hostEl.getParentNode().removeChild(hostEl);
             }
         }
-
+        XMLUtils.saveFile(document);
     }
 
     public static void initializeConfigOnFirstRun() throws ParserConfigurationException, IOException, SAXException, TransformerException {
