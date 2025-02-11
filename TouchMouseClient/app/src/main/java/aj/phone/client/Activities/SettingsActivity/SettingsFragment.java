@@ -61,6 +61,7 @@ public class SettingsFragment extends Fragment {
     ) {
         this.activitiesManager = this.diModule.getActivitiesManager();
         this.networkModule = this.diModule.getNetworkModule();
+        this.addActionOnBack();
         View rootView = inflater.inflate(R.layout.settings_fragment, container, false);
         this.setElements(rootView);
         this.addHostsRecyclerView(rootView);

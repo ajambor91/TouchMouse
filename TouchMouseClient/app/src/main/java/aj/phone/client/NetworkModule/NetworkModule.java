@@ -80,6 +80,9 @@ public class NetworkModule extends MouseInet {
     public void changeName(String newName) {
         this.setMouseName(newName);
         MessageCreator messageCreator = this.createMessageCreator(TCPMessageTypeEnum.NAME_CHANGE);
+        if (this.getConnectionStatus() != EConnectionStatus.CONNECTED) {
+            return;
+        }
         try {
             this.tcpMessageBuffer.addMessage((TCPMessage) messageCreator.getMessage());
             synchronized (this.tcpClient.getTcpSender()) {

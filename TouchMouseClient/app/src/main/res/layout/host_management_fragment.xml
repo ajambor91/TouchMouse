@@ -31,18 +31,16 @@
         android:id="@+id/management_disconnect_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@drawable/button"
         android:background="@drawable/button"
-        android:textColor="@drawable/button"
+        android:textColor="@color/button"
         android:text="Disconnect host" />
 
     <Button
         android:layout_marginTop="20dp"
         android:id="@+id/management_remove_btn"
         android:layout_width="match_parent"
-        android:backgroundTint="@drawable/button"
         android:background="@drawable/button"
-        android:textColor="@drawable/button"
+        android:textColor="@color/button"
         android:layout_height="wrap_content"
         android:text="Remove host" />
     <View
@@ -52,9 +50,9 @@
 
     <Button
         android:id="@+id/management_back_btn"
-        android:backgroundTint="@drawable/button"
         android:background="@drawable/button"
-        android:textColor="@drawable/button"
+        android:layout_marginBottom="40dp"
+        android:textColor="@color/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Back" />

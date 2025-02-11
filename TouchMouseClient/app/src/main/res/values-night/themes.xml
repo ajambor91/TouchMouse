@@ -6,12 +6,9 @@
         <item name="android:navigationBarColor">#242323</item>
         <item name="android:statusBarColor">#242323</item>
         <item name="android:itemBackground">#242323</item>
-        <item name="backgroundTint">#242323</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:popupBackground">@android:color/white</item>
-        <item name="colorPrimary">#242323</item>
-        <item name="colorPrimaryDark">#242323</item>
-        <item name="colorAccent">#242323</item>
+
 
 
     </style>
