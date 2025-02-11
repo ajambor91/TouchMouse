@@ -39,21 +39,21 @@ However if you using Windows, you can run compiled desktop .exe app from apps di
 
 ### Connecting
 
-![Connecting](screens/mobile/connecting.jpg)
+![Connecting](screens/mobile/connecting_scaled.jpg)
 
 On start application will start connecting process, you have to wait for host connection
 
-![Touchpad](screens/mobile/touchpad.jpg)
+![Touchpad](screens/mobile/touchpad_scaled.jpg)
 
 Here is the touchpad activity. Quick tap on this screen will be mouse button down and next mouse button up event on pc. Two fingers scrolling will scroll your active window on PC. For contect menu please hold one finger and quick tap second.
 
 ### Settings
 
-![Settings](screens/mobile/settings.jpg)
+![Settings](screens/mobile/settings_scaled.jpg)
 
 On the settings screen you can change the mouse name, or go to host manager.
 
-![HostManager](screens/mobile/host_manager.jpg)
+![HostManager](screens/mobile/host_manager_scaled.jpg)
 
 You can disconnect a connected host or remove any PC. The removal action will also disconnect the host.
 
