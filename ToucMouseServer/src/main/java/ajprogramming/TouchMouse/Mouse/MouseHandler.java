@@ -154,6 +154,8 @@ public class MouseHandler {
 
     private void initialize() {
         HashMap<String, IMouse> mice = AppConfig.getInstance().getMice();
+        this.loggerEx.info("Initializing mouse hadnler");
+
         this.mouseHashMap = mice;
     }
 }

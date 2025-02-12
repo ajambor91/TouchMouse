@@ -119,17 +119,27 @@ public class XMLUtils {
 
     public static HashMap<String, IMouse> getMice() throws ParserConfigurationException, IOException, SAXException {
         HashMap<String, IMouse> miceHashMap = new HashMap<>();
+
         Document document = XMLUtils.initializeDocument();
         Element rootElement = (Element) document.getElementsByTagName(XMLUtils.rootTag).item(0);
-        NodeList nodeList = document.getElementsByTagName(XMLUtils.miceTagName).item(0).getChildNodes();
-        if (nodeList == null) {
-            Element hosts = XMLUtils.createElement(document, XMLUtils.miceTagName, XMLUtils.miceTagName);
-            rootElement.appendChild(hosts);
-            nodeList = hosts.getChildNodes();
+        NodeList nodes =  document.getElementsByTagName(XMLUtils.miceTagName);
+        Node node = null;
+        if (nodes != null) {
+            node  = nodes.item(0);
         }
 
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
+        NodeList miceList = null;
+        if (node == null) {
+            Element hosts = XMLUtils.createElement(document, XMLUtils.miceTagName, XMLUtils.miceTagName);
+            rootElement.appendChild(hosts);
+
+            miceList = hosts.getChildNodes();
+        } else {
+            miceList = node.getChildNodes();
+        }
+
+        for (int i = 0; i < miceList.getLength(); i++) {
+             node = miceList.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
                 String mouseId = element.getAttribute(XMLUtils.mouseIdTagName);
