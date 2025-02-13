@@ -60,6 +60,13 @@ You can disconnect a connected host or remove any PC. The removal action will al
 ![Desktop](screens/desktop/desktop.png)
 
 In the desktop application you can remove and disconnect phone touchpad. Also you can go to the information screen and see broadcast interfaces, your hostname, ip and app version.
+
+## Realease
+You can now download the built applications. The app-based code is in the release branch.  Windows and Android apps v0.1.0 are currently available.
+https://ftp.adamantum.site/TouchMouse/
+Note: On Android, you have to enable the "Install from unknown sources" option. On Windows, the application is not signed, so Windows Smart Screen will warn you that the application might harm your system. However, this is not true. All the apps are safe.
+
+
 ## Future Enhancements
 
 Here are the planned improvements and features for TouchMouse:
