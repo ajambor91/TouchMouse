@@ -65,7 +65,9 @@ public class TCPClient extends Thread {
     }
 
     public void stopService() throws IOException {
-        this.socket.close();
+        if (this.socket != null) {
+            this.socket.close();
+        }
         this.interrupt();
     }
 

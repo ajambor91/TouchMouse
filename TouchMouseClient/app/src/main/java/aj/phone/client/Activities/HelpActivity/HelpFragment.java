@@ -81,19 +81,14 @@ public class HelpFragment extends Fragment {
     }
 
     private void back() {
-        if (this.activitiesManager.getPreviousActivity() instanceof ConnectionActivity &&
-                this.networkModule.getConnectionStatus() == EConnectionStatus.CONNECTED
-        ) {
+        if (this.networkModule.getConnectionStatus() == EConnectionStatus.CONNECTED) {
             this.activitiesManager.runActivity(TouchPadActivity.class);
 
-        } else if (this.activitiesManager.getPreviousActivity() instanceof ConnectionActivity &&
-                this.networkModule.getConnectionStatus() == EConnectionStatus.FAIL ||
-                this.networkModule.getConnectionStatus() == EConnectionStatus.DISCONNECTED
-        ) {
+        } else if (this.networkModule.getConnectionStatus() == EConnectionStatus.FAIL || this.networkModule.getConnectionStatus() == EConnectionStatus.DISCONNECTED){
             this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
 
-        } else {
-            this.activitiesManager.previousActivity();
+        } else  {
+            this.activitiesManager.runActivity(ConnectionActivity.class);
 
         }
     }

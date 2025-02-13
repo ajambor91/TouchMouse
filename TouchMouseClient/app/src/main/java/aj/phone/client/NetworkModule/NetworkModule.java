@@ -161,18 +161,19 @@ public class NetworkModule extends MouseInet {
     public void onDisconnectOrFail() {
 
         try {
-            if (activitiesManager.isOnSettings()) {
-                return;
+
+                this.udpClient.stopService();
+                this.broadcastListener.interrupt();
+                this.tcpClient.stopService();
+                if (this.getConnectionStatus() == EConnectionStatus.INITIALIZED) {
+                    this.setConnectionStatus(EConnectionStatus.FAIL);
+                } else {
+                    this.setConnectionStatus(EConnectionStatus.DISCONNECTED);
+                }
+            if (activitiesManager.isOnConnecting()) {
+
+                this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
             }
-            this.udpClient.stopService();
-            this.broadcastListener.interrupt();
-            this.tcpClient.stopService();
-            if (this.getConnectionStatus() == EConnectionStatus.INITIALIZED) {
-                this.setConnectionStatus(EConnectionStatus.FAIL);
-            } else {
-                this.setConnectionStatus(EConnectionStatus.DISCONNECTED);
-            }
-            this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
         } catch (IOException e) {
             Log.e("NETWORK", "Cannot interrupt TCP", e);
             throw new RuntimeException(e);

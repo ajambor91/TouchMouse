@@ -28,8 +28,9 @@ public class UDPClient extends Thread {
     }
 
     public void stopService() {
-
-        this.datagramSocket.close();
+        if (datagramSocket != null) {
+            this.datagramSocket.close();
+        }
         this.interrupt();
     }
 
