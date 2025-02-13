@@ -114,10 +114,21 @@ public class HostManagementFragment extends Fragment {
         this.onBackButton();
     }
 
+    private void reconnectHost() {
+
+    }
+
     private void diconnectHost() {
         if (this.currentHost.isActiveHost()) {
             this.disconnectButton.setOnClickListener(e -> {
-                this.hostManager.disconnectHost();
+                if (disconnectButton.getText().equals("Disconnect host")) {
+                    this.hostManager.disconnectHost();
+                    this.disconnectButton.setText("Reconnect host");
+                } else  {
+                    this.hostManager.reconnectHost();
+                    this.disconnectButton.setText("Disconnect host");
+                }
+
             });
         } else {
             this.disconnectButton.setEnabled(false);

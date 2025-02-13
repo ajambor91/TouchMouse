@@ -13,6 +13,7 @@ public class Host implements IHost {
     private boolean isDefault;
     private String sessionId;
 
+
     public String getName() {
         return this.name;
     }

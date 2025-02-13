@@ -42,4 +42,8 @@ public class HostManager {
             this.activeHost.disconnect();
         }
     }
+
+    public void reconnectHost() {
+        this.activeHost.reconnectSpecifiedHost(this.currentHost);
+    }
 }

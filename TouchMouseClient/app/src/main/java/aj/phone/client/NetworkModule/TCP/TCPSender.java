@@ -12,13 +12,26 @@ import aj.phone.client.NetworkModule.Message.MessageCreator;
 public class TCPSender extends Thread {
     private final Socket socket;
     private final boolean running;
-    private final TCPMessageBuffer tcpMessageBuffer;
+    private TCPMessageBuffer tcpMessageBuffer;
 
     public TCPSender(Socket socket, TCPMessageBuffer tcpMessageBuffer) {
         this.running = true;
         this.tcpMessageBuffer = tcpMessageBuffer;
         this.socket = socket;
         this.start();
+    }
+
+    public void stopService() {
+        try {
+            if (this.socket != null) {
+                this.socket.close();
+            }
+            this.interrupt();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
@@ -41,6 +54,7 @@ public class TCPSender extends Thread {
                 }
 
             } catch (InterruptedException | IOException e) {
+
                 Log.d("TCP Sender", "Host diconnected");
             }
         }

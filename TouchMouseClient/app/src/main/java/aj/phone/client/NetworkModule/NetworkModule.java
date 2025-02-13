@@ -7,6 +7,7 @@ import java.io.IOException;
 import aj.phone.client.Activities.ConnectionActivity.ConnectionActivity;
 import aj.phone.client.Activities.TouchPadActivity.TouchPadActivity;
 import aj.phone.client.Core.ActivitiesManager;
+import aj.phone.client.IHost;
 import aj.phone.client.NetworkModule.Enums.EConnectionStatus;
 import aj.phone.client.NetworkModule.Enums.EMouseTouch;
 import aj.phone.client.NetworkModule.Enums.EMouseTouchType;
@@ -28,7 +29,7 @@ import aj.phone.client.Utils.Config;
 public class NetworkModule extends MouseInet {
 
     private static NetworkModule instance;
-    private final TCPMessageBuffer tcpMessageBuffer;
+    private TCPMessageBuffer tcpMessageBuffer;
     private boolean connected = false;
     private ActivitiesManager activitiesManager;
     private UDPClient udpClient;
@@ -52,6 +53,26 @@ public class NetworkModule extends MouseInet {
 
     public void setActivitiesManager(ActivitiesManager activitiesManager) {
         this.activitiesManager = activitiesManager;
+    }
+
+    public void reconnectSpecifiedHost(IHost host) {
+        try {
+            if (this.getConnectionStatus() == EConnectionStatus.CONNECTED ||
+                    this.getConnectionStatus() == EConnectionStatus.RECONNECTING ||
+                    this.getConnectionStatus() == EConnectionStatus.LISTEN) {
+                this.udpClient.stopService();
+                this.tcpClient.stopService();
+            }
+            this.tcpMessageBuffer = new TCPMessageBuffer();
+            this.setHostAddress(host.getHostAddress());
+            this.udpClient = new UDPClient(this);
+            this.tcpClient = new TCPClient(this, this.tcpMessageBuffer);
+            this.tcpClient.start();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void runTCP(BroadcastMessage message) {
@@ -102,6 +123,7 @@ public class NetworkModule extends MouseInet {
                 this.tcpClient.getTcpSender().notify();
             }
 
+
         } catch (Exception e) {
             Log.e("Disconnect", "Disconnect error", e);
             throw new RuntimeException(e);
@@ -138,6 +160,7 @@ public class NetworkModule extends MouseInet {
 
     public void reconnect() {
         this.setDisconnected();
+        this.tcpMessageBuffer = new TCPMessageBuffer();
         this.udpClient.interrupt();
         this.tcpClient = new TCPClient(this, this.tcpMessageBuffer);
         this.udpClient = new UDPClient(this);

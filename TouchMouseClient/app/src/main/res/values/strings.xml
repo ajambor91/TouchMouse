@@ -16,5 +16,9 @@
     <string name="rmb_description">To perform a right-click action, simply hold one finger on the screen (like a long press) and then quickly tap the screen with a second finger. This gesture simulates the right-click function of a mouse, allowing you to access context menus and additional options.</string>
     <string name="click_title">Click</string>
     <string name="click_description">"It's a basic gesture, to perform click action quilcy tap screen. "</string>
+    <string name="disconnect_host">Disconnect host</string>
+    <string name="remove_host">Remove host</string>
+    <string name="back">Back</string>
+    <string name="host_manager">Host Manager</string>
 
 </resources>

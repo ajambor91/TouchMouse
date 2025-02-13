@@ -19,7 +19,7 @@ import aj.phone.client.NetworkModule.NetworkModule;
 import aj.phone.client.Utils.Config;
 
 public class TCPClient extends Thread {
-    private final TCPMessageBuffer tcpMessageBuffer;
+    private TCPMessageBuffer tcpMessageBuffer;
     private final int maxTries = 10;
     private final boolean connected = false;
     private final int currentTry = 0;
@@ -68,6 +68,8 @@ public class TCPClient extends Thread {
         if (this.socket != null) {
             this.socket.close();
         }
+
+        this.tcpSender.stopService();
         this.interrupt();
     }
 
