@@ -76,7 +76,7 @@ public class TCPService extends Thread{
 
     private void processTCPMessage(TCPMessage tcpMessage, Socket socket) {
         if (tcpMessage.getType() == TCPMessageTypeEnum.CONNECTION) {
-            this.mouseHandler.addMouse(tcpMessage, socket);
+            this.mouseHandler.connectMouse(tcpMessage, socket);
         } else if (tcpMessage.getType() == TCPMessageTypeEnum.RECONNECT) {
             this.mouseHandler.reconnect(tcpMessage, socket);
         }

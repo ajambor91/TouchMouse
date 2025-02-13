@@ -7,6 +7,7 @@ import java.net.DatagramSocket;
 import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 
+import aj.phone.client.NetworkModule.Enums.EConnectionStatus;
 import aj.phone.client.NetworkModule.Enums.MessageTypes;
 import aj.phone.client.NetworkModule.Message.BroadcastMessage;
 import aj.phone.client.NetworkModule.Message.MessageCreator;
@@ -36,7 +37,10 @@ public class BroadcastListener extends Thread {
         } catch (SocketTimeoutException socketTimeoutException) {
             Log.d("BROADCAST", "Cannot received broadcast data");
             socket.close();
-            this.networkModule.onDisconnectOrFail();
+            if (this.networkModule.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
+                this.networkModule.onBroadcastTimeout();
+
+            }
 
 
         } catch (Exception e) {

@@ -9,9 +9,9 @@ import aj.phone.client.Utils.Config;
 
 public class HostManager {
 
+    private final Config config;
     private NetworkModule activeHost;
     private Host currentHost;
-    private final Config config;
 
     public HostManager(IHost host) {
         this.config = Config.getInstance();

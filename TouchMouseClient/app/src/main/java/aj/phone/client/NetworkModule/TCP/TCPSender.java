@@ -11,8 +11,8 @@ import aj.phone.client.NetworkModule.Message.MessageCreator;
 
 public class TCPSender extends Thread {
     private final Socket socket;
-    private final boolean running;
-    private TCPMessageBuffer tcpMessageBuffer;
+    private boolean running;
+    private final TCPMessageBuffer tcpMessageBuffer;
 
     public TCPSender(Socket socket, TCPMessageBuffer tcpMessageBuffer) {
         this.running = true;
@@ -48,13 +48,15 @@ public class TCPSender extends Thread {
                     OutputStream outputStream = this.socket.getOutputStream();
                     PrintWriter writer = new PrintWriter(outputStream, true);
                     writer.println(jsonMessage);
+                    Log.d("TCP SENDER", String.format("Sen message: %s", jsonMessage));
+
                 }
                 synchronized (this) {
                     this.wait();
                 }
 
             } catch (InterruptedException | IOException e) {
-
+                this.running = false;
                 Log.d("TCP Sender", "Host diconnected");
             }
         }

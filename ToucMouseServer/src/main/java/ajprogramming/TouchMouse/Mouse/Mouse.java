@@ -70,9 +70,9 @@ public class Mouse extends Thread implements IMouse{
     }
 
     public void reconnect(Socket socket) {
+        this.tcpSocket = socket;
 
         try {
-            this.tcpSocket = socket;
 
             this.sendReconnectAnswerTCPMessage();
 
@@ -92,6 +92,7 @@ public class Mouse extends Thread implements IMouse{
         return this.mouseId;
     }
 
+    @Override
     public void run() {
         this.listeningTCP();
     }
@@ -142,16 +143,18 @@ public class Mouse extends Thread implements IMouse{
                 this.processTCPMessage((TCPMessage) messageCreator.getMessage());
                 this.isConnected = true;
             }
+            if (this.isInterrupted()) {
+                this.wait();
+            }
             this.connectionStatus = EConnectionStatus.FAIL;
             this.isConnected = false;
                 this.interrupt();
 
 
 
-        } catch (IOException | IllegalMonitorStateException e) {
-            this.disconnectMouse();
-
-            throw new RuntimeException(e);
+        } catch (IOException | IllegalMonitorStateException | InterruptedException e) {
+            this.loggerEx.info("Mouse disconnecting");
+//            this.disconnectMouse();
         }
     }
 
@@ -201,8 +204,10 @@ public class Mouse extends Thread implements IMouse{
                 TCPMessageTypeEnum.RECONNECT_ANSWER
         );
         writer.println(messageCreator.jsonfyMessage());
+        this.loggerEx.info("Reconnect answer", String.format("Sending reconnect answer: %s", messageCreator.jsonfyMessage()));
         this.isConnected = true;
         this.connectionStatus = EConnectionStatus.CONNECTED;
+
     }
 
     private void sendTCPMessage(TCPMessage tcpMessage) {
@@ -213,7 +218,7 @@ public class Mouse extends Thread implements IMouse{
             writer.println(messageCreator.jsonfyMessage());
         } catch (IOException e) {
             this.connectionStatus = EConnectionStatus.FAIL;
-            throw new RuntimeException(e);
+
         }
 
     }
@@ -251,16 +256,31 @@ public class Mouse extends Thread implements IMouse{
                 TCPMessageTypeEnum.DISCONNECT
         );
         this.sendTCPMessage((TCPMessage) messageCreator.getMessage());
-        this.mouseMove.interrupt();
+
+
+
     }
 
     private void disconnect() {
-        this.sendDisconnectMessage();
-        this.interrupt();
+        try {
+            this.isConnected = false;
+//            this.mouseHandler.refreshMouseList();
+            this.connectionStatus = EConnectionStatus.FAIL;
 
-        this.connectionStatus = EConnectionStatus.FAIL;
-        this.isConnected = false;
+            this.loggerEx.info("Destroying socket");
+            this.sendDisconnectMessage();
+            this.mouseMove.interrupt();
+            this.mouseMove = null;
+            this.tcpSocket.close();
+            this.tcpSocket = null;
+            this.interrupt();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 
 
 }

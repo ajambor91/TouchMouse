@@ -5,23 +5,19 @@ import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
-import java.util.HashMap;
-
 import aj.phone.client.Activities.BaseActivity;
 import aj.phone.client.Activities.ConnectionActivity.ConnectionActivity;
 import aj.phone.client.Activities.ConnectionActivity.ConnectionRefreshFragment;
-import aj.phone.client.Activities.SettingsActivity.SettingsActivity;
+import aj.phone.client.Activities.TouchPadActivity.TouchPadActivity;
 import aj.phone.client.R;
 
 
 public class ActivitiesManager {
 
     private static ActivitiesManager instance;
-    private final HashMap<String, BaseActivity> activities;
     private BaseActivity currentActivity;
 
     private ActivitiesManager() {
-        this.activities = new HashMap<>();
     }
 
     public static ActivitiesManager getInstance() {
@@ -35,8 +31,9 @@ public class ActivitiesManager {
         this.currentActivity = activity;
     }
 
-    public boolean isOnConnecting() {
-        return this.currentActivity instanceof ConnectionActivity;
+    public boolean isOnConnectingOrTouchpad() {
+        Log.d("TCP ACTIVITY", String.format("Is connection activity %b", this.currentActivity instanceof ConnectionActivity));
+        return this.currentActivity instanceof ConnectionActivity || this.currentActivity instanceof TouchPadActivity;
     }
 
     public void runActivity(Class<?> activityToOpen) {
@@ -52,7 +49,7 @@ public class ActivitiesManager {
         if (activityToOpen != this.currentActivity.getClass()) {
             Log.d("ACT_CHANGE", "Changing activity");
             Intent intent = new Intent(this.currentActivity, activityToOpen);
-            intent.putExtra("frg", 1);
+            intent.putExtra("frg", R.id.refresh_fragment);
             this.currentActivity.startActivity(intent);
         } else {
             Log.d("ACT_CHANGE", "Changing screen instead activity");

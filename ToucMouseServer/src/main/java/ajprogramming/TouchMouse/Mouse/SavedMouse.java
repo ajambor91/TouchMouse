@@ -8,6 +8,13 @@ public class SavedMouse implements IMouse{
     private String mouseName;
     private String mouseAddress;
     private boolean isDefault;
+
+    public SavedMouse(Mouse mouse) {
+        this.mouseName = mouse.getMouseName();
+        this.mouseAddress = mouse.getMouseAddress();
+        this.mouseId = mouse.getMouseId();
+    }
+
     public SavedMouse(String mouseId, String mouseName, String mouseAddress, boolean isDefault) {
         this.mouseName = mouseName;
         this.mouseId = mouseId;

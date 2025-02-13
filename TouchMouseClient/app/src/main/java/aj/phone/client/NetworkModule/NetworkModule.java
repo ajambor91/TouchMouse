@@ -30,7 +30,6 @@ public class NetworkModule extends MouseInet {
 
     private static NetworkModule instance;
     private TCPMessageBuffer tcpMessageBuffer;
-    private boolean connected = false;
     private ActivitiesManager activitiesManager;
     private UDPClient udpClient;
     private TCPClient tcpClient;
@@ -72,12 +71,11 @@ public class NetworkModule extends MouseInet {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void runTCP(BroadcastMessage message) {
         Log.d("TCP", String.format("Run TCP for message appName: %s with self appName: %s", message.getAppName(), this.getAppName()));
-        if (!this.connected && message.getAppName().equals(this.getAppName())) {
+        if (message.getAppName().equals(this.getAppName())) {
             String hostAddress = message.getHostAddress();
             this.setHostAddress(hostAddress);
             this.tcpClient.start();
@@ -94,7 +92,6 @@ public class NetworkModule extends MouseInet {
             this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
             this.udpClient.notify();
         }
-
     }
 
     public void changeName(String newName) {
@@ -108,7 +105,6 @@ public class NetworkModule extends MouseInet {
             synchronized (this.tcpClient.getTcpSender()) {
                 this.tcpClient.getTcpSender().notify();
             }
-
         } catch (Exception e) {
             Log.e("Disconnect", "Disconnect error", e);
             throw new RuntimeException(e);
@@ -116,19 +112,20 @@ public class NetworkModule extends MouseInet {
     }
 
     public void disconnect() {
-        MessageCreator messageCreator = this.createMessageCreator(TCPMessageTypeEnum.DISCONNECT);
-        try {
-            this.tcpMessageBuffer.addMessage((TCPMessage) messageCreator.getMessage());
-            synchronized (this.tcpClient.getTcpSender()) {
-                this.tcpClient.getTcpSender().notify();
+        if (this.tcpClient != null && this.tcpMessageBuffer != null && this.tcpClient.getTcpSender() != null) {
+            MessageCreator messageCreator = this.createMessageCreator(TCPMessageTypeEnum.DISCONNECT);
+            try {
+                Log.d("TCP", "Disconnect and adding message to buffer");
+                this.tcpMessageBuffer.addMessage((TCPMessage) messageCreator.getMessage());
+                synchronized (this.tcpClient.getTcpSender()) {
+                    this.tcpClient.getTcpSender().notify();
+                }
+
+            } catch (Exception e) {
+                Log.e("Disconnect", "Disconnect error", e);
+                throw new RuntimeException(e);
             }
-
-
-        } catch (Exception e) {
-            Log.e("Disconnect", "Disconnect error", e);
-            throw new RuntimeException(e);
         }
-
     }
 
     public void setTouchUDPMessage(int scrollLine) {
@@ -140,7 +137,6 @@ public class NetworkModule extends MouseInet {
             this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
             this.udpClient.notify();
         }
-
     }
 
     public void setTouchUDPMessage(int moveX, int moveY) {
@@ -148,63 +144,67 @@ public class NetworkModule extends MouseInet {
         Move move = new Move();
         move.setX(moveX);
         move.setY(moveY);
-
         MessageCreator messageCreator = this.createMessageCreator(UDPMessageTypeEnum.MOVE, move);
         synchronized (this.udpClient) {
             this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
             this.udpClient.notify();
         }
-
-
     }
 
     public void reconnect() {
-        this.setDisconnected();
         this.tcpMessageBuffer = new TCPMessageBuffer();
         this.udpClient.interrupt();
         this.tcpClient = new TCPClient(this, this.tcpMessageBuffer);
         this.udpClient = new UDPClient(this);
         this.broadcastListener = new BroadcastListener(this);
         this.broadcastListener.start();
-
     }
 
-    public boolean isConnected() {
-        return this.connected;
+    public void onBroadcastTimeout() {
+        this.setConnectionStatus(EConnectionStatus.BROADCAST_TIMEOUT);
+        this.stopServices();
+        Log.d("NETWORK", "On broadcast timeout");
+        this.conditionallyRunConnectionActivity();
     }
 
-    public void setConnected() {
-        this.connected = true;
+    public void processTCPSocketException() {
+        this.setConnectionStatus(EConnectionStatus.FAIL);
+        this.stopServices();
+        Log.d("NETWORK", "On tcp socket exception");
+        this.conditionallyRunConnectionActivity();
     }
 
-    public void setDisconnected() {
-        this.connected = false;
+    public void processDisconnectMessage() {
+        this.setConnectionStatus(EConnectionStatus.DISCONNECTED);
+        Log.d("NETWORK", "On message disconnect");
+        this.stopServices();
+        this.conditionallyRunConnectionActivity();
     }
 
-    public void onDisconnectOrFail() {
+    public void processHostDisconnect() {
+        this.setConnectionStatus(EConnectionStatus.DISCONNECTED_HOST);
+        Log.d("NETWORK", "On message disconnect");
+        this.stopServices();
+        this.conditionallyRunConnectionActivity();
+    }
 
-        try {
-
-                this.udpClient.stopService();
-                this.broadcastListener.interrupt();
-                this.tcpClient.stopService();
-                if (this.getConnectionStatus() == EConnectionStatus.INITIALIZED) {
-                    this.setConnectionStatus(EConnectionStatus.FAIL);
-                } else {
-                    this.setConnectionStatus(EConnectionStatus.DISCONNECTED);
-                }
-            if (activitiesManager.isOnConnecting()) {
-
-                this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
-            }
-        } catch (IOException e) {
-            Log.e("NETWORK", "Cannot interrupt TCP", e);
-            throw new RuntimeException(e);
-        }
-
+    public void processReconnecting() {
+        this.setConnectionStatus(EConnectionStatus.RECONNECTING);
+        this.processConnection();
     }
 
     public void processNewConnection() {
+        this.setConnectionStatus(EConnectionStatus.CONNECTED);
+        this.processConnection();
+    }
+
+    private void conditionallyRunConnectionActivity() {
+        if (this.activitiesManager.isOnConnectingOrTouchpad()) {
+            this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
+        }
+    }
+
+    private void processConnection() {
         this.runUDP();
         this.activitiesManager.runActivity(TouchPadActivity.class);
     }
@@ -216,6 +216,19 @@ public class NetworkModule extends MouseInet {
             Log.d("NETWORK", "Initialized network");
             this.broadcastListener.start();
             this.setConnectionStatus(EConnectionStatus.LISTEN);
+        }
+    }
+
+    private void stopServices() {
+        try {
+
+            this.udpClient.stopService();
+            this.broadcastListener.interrupt();
+            this.tcpClient.stopService();
+
+        } catch (IOException e) {
+            Log.e("NETWORK", "Cannot interrupt TCP", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -256,10 +269,6 @@ public class NetworkModule extends MouseInet {
 
     private void runUDP() {
         Log.d("UDP", "Initilizing UDP");
-
-        if (this.connected) {
-            Log.d("UDP", "Starting UDP");
-            this.udpClient.start();
-        }
+        this.udpClient.start();
     }
 }

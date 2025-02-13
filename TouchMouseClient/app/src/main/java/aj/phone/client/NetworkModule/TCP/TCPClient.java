@@ -19,10 +19,8 @@ import aj.phone.client.NetworkModule.NetworkModule;
 import aj.phone.client.Utils.Config;
 
 public class TCPClient extends Thread {
-    private TCPMessageBuffer tcpMessageBuffer;
-    private final int maxTries = 10;
-    private final boolean connected = false;
-    private final int currentTry = 0;
+    private final TCPMessageBuffer tcpMessageBuffer;
+
     private final NetworkModule networkModule;
     private volatile boolean running = true;
     private TCPSender tcpSender;
@@ -38,28 +36,27 @@ public class TCPClient extends Thread {
         this.socket = new Socket();
 
         while (this.running) {
-            Log.d("TCP", String.format("Trying connect %s", this.maxTries));
             try {
                 this.socket.connect(new InetSocketAddress(this.networkModule.getHostAddress(), 9123), 5000);
+                if (this.tcpSender == null) {
+                    this.tcpSender = new TCPSender(socket, this.tcpMessageBuffer);
+
+                }
+
                 Log.d("TCP", "Connected to host");
-                this.tcpSender = new TCPSender(socket, this.tcpMessageBuffer);
-                this.networkModule.setConnected();
                 this.initConnection();
                 this.listenForMessage(this.socket);
             } catch (SocketException socketException) {
-                if (this.networkModule.isConnected()) {
-                    this.running = false;
-                    this.networkModule.onDisconnectOrFail();
+                if (this.networkModule.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
+                    this.networkModule.processTCPSocketException();
                 }
+                this.running = false;
+
             } catch (IOException e) {
                 this.running = false;
                 Log.d("TCP", "Cannot connect");
 
             }
-        }
-        if (!this.networkModule.isConnected()) {
-
-            this.networkModule.onDisconnectOrFail();
         }
 
     }
@@ -68,12 +65,15 @@ public class TCPClient extends Thread {
         if (this.socket != null) {
             this.socket.close();
         }
+        if (this.tcpSender != null) {
+            this.tcpSender.stopService();
+        }
 
-        this.tcpSender.stopService();
         this.interrupt();
     }
 
     public TCPSender getTcpSender() {
+        Log.d("TCP Sender", "Get TCPSender");
         return this.tcpSender;
     }
 
@@ -108,8 +108,15 @@ public class TCPClient extends Thread {
                 Config.getInstance().addHost(this.networkModule);
                 this.processMessage((TCPMessage) messageCreator.getMessage());
             }
+            Log.d("TCP", "Socket closed");
         } catch (SocketException socketException) {
-            this.networkModule.onDisconnectOrFail();
+            Log.d("TCP", "Socket closed");
+
+            if (this.networkModule.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
+                Log.d("TCP", "Socket closed");
+
+                this.networkModule.processHostDisconnect();
+            }
 
         }
     }
@@ -118,16 +125,13 @@ public class TCPClient extends Thread {
         Log.d("TCP", String.format("Processing TCP message with action %s", tcpMessage.getType().getMessageType()));
         if (tcpMessage.getType() == TCPMessageTypeEnum.CONNECTION) {
             Log.d("TCP", "Processing connection message");
-            this.networkModule.setConnectionStatus(EConnectionStatus.CONNECTED);
             this.networkModule.processNewConnection();
         } else if (tcpMessage.getType() == TCPMessageTypeEnum.DISCONNECT) {
             Log.d("TCP", "Processing disconnection message");
-            this.networkModule.setConnectionStatus(EConnectionStatus.DISCONNECTED);
-            this.networkModule.onDisconnectOrFail();
+            this.networkModule.processDisconnectMessage();
         } else if (tcpMessage.getType() == TCPMessageTypeEnum.RECONNECT_ANSWER) {
             Log.d("TCP", "Processing connection message");
-            this.networkModule.setConnectionStatus(EConnectionStatus.CONNECTED);
-            this.networkModule.processNewConnection();
+            this.networkModule.processReconnecting();
         }
 
     }

@@ -59,8 +59,7 @@ public class MouseMove extends Thread {
                     try {
                         wait();
                     } catch (InterruptedException e) {
-                        this.loggerEx.warning("Mouse move interrupted", e.getMessage());
-                        throw new RuntimeException(e);
+                        this.loggerEx.warning("Mouse move interrupted", "Interrupted thread");
                     }
                 }
             }

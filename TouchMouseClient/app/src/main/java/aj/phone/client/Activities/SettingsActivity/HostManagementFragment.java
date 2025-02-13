@@ -124,7 +124,7 @@ public class HostManagementFragment extends Fragment {
                 if (disconnectButton.getText().equals("Disconnect host")) {
                     this.hostManager.disconnectHost();
                     this.disconnectButton.setText("Reconnect host");
-                } else  {
+                } else {
                     this.hostManager.reconnectHost();
                     this.disconnectButton.setText("Disconnect host");
                 }

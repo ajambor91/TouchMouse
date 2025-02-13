@@ -27,30 +27,24 @@ public class ConnectionActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ConnectionActivityBinding.inflate(getLayoutInflater());
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
         Log.d("APP_MAIN", "Initialized main activity");
-        Bundle intentFragment = getIntent().getExtras();
+        try {
+            Bundle intentFragment = getIntent().getExtras();
+            if (intentFragment != null) {
+                int fragment = intentFragment.getInt("frg");
+                Log.d("APP_DEBUG", String.format("Displays main app screen %s", fragment));
 
-        if (intentFragment != null) {
-            int fragment = intentFragment.getInt("frg");
-            Log.d("APP_DEBUG", String.format("Displays main app screen %s", fragment));
-
-            switch (fragment) {
-                case 1:
-                    try {
-                        this.initReconnect();
-                    } catch (Exception e) {
-                        Log.d("APP_DEBUG", e.getMessage());
-                        this.initMainApp();
-                    }
-                    break;
+                if (fragment == R.id.refresh_fragment) {
+                    this.initReconnect();
+                    return;
+                }
+                Log.d("APP_DEBUG", "No fragment");
             }
-        } else {
-            Log.d("APP_DEBUG", "No fragment");
-
             this.initMainApp();
+        } catch (Exception e) {
+            Log.e("APP", "On create error", e);
         }
+
 
     }
 

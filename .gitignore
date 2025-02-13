@@ -8,7 +8,8 @@ TouchMouseClient/.idea/workspace.xml
 TouchMouseClient/.idea/navEditor.xml
 TouchMouseClient/.idea/assetWizardSettings.xml
 TouchMouseClient/.DS_Store
-TouchMouseClient/build
+TouchMouseClient/app/build
+TouchMouseClient/app/release
 TouchMouseClient/captures
 TouchMouseClient/.externalNativeBuild
 TouchMouseClient/.cxx

@@ -40,9 +40,9 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.activitiesManager = this.diModule.getActivitiesManager();
         Log.d("BASE ACTIVITY", "Creating new activity");
-        this.activitiesManager.setCurrentActivity(this);
         this.networkModule = this.diModule.getNetworkModule();
         this.networkModule.setActivitiesManager(this.activitiesManager);
+        this.activitiesManager.setCurrentActivity(this);
 
     }
 

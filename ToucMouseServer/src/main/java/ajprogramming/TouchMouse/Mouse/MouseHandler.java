@@ -30,7 +30,7 @@ public class MouseHandler {
         this.mainFrame = mainFrame;
     }
 
-    public void addMouse(TCPMessage tcpMessage, Socket clientSocket) {
+    public void connectMouse(TCPMessage tcpMessage, Socket clientSocket) {
         this.loggerEx.info("Adding mouse", tcpMessage.getMouseId());
         IMouse mouse = this.mouseHashMap.get(tcpMessage.getMouseId());
 
@@ -69,14 +69,12 @@ public class MouseHandler {
         this.loggerEx.info("Reconnecting mouse", tcpMessage.getMouseId());
 
         IMouse mouse = this.mouseHashMap.get(tcpMessage.getMouseId());
-        if (mouse instanceof Mouse) {
+        if (mouse  != null) {
             this.loggerEx.info("Mouse reconnected", tcpMessage.getMouseId());
-            ((Mouse) mouse).reconnect(clientSocket);
-            this.refreshMouseList();
-
-        } else {
-            this.addMouse(tcpMessage, clientSocket);
+            this.connectMouse(tcpMessage, clientSocket);
         }
+
+
     }
 
     public void onAction(List<UDPMessage> message) {
@@ -141,7 +139,7 @@ public class MouseHandler {
 
     }
 
-    private void refreshMouseList() {
+    public void refreshMouseList() {
         if (this.mainFrame != null) {
             this.mainFrame.refreshMousesList();
 
