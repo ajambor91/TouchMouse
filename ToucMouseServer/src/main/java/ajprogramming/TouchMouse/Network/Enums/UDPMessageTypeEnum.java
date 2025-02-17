@@ -3,6 +3,7 @@ package ajprogramming.TouchMouse.Network.Enums;
 public enum UDPMessageTypeEnum {
     MOVE("move"),
     TOUCH("touch"),
+    KEYBOARD("keyboard"),
     SCROLL("scroll");
 
 

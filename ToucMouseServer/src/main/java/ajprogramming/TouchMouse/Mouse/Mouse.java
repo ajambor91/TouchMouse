@@ -1,9 +1,12 @@
 package ajprogramming.TouchMouse.Mouse;
 
+import ajprogramming.TouchMouse.Keyboard.Keyboard;
 import ajprogramming.TouchMouse.Network.Enums.EConnectionStatus;
 import ajprogramming.TouchMouse.Network.Enums.MessageTypes;
 import ajprogramming.TouchMouse.Network.Enums.TCPMessageTypeEnum;
+import ajprogramming.TouchMouse.Network.Enums.UDPMessageTypeEnum;
 import ajprogramming.TouchMouse.Network.IHost;
+import ajprogramming.TouchMouse.Network.KeyboardMessageBuffer;
 import ajprogramming.TouchMouse.Network.MessageBuffer;
 import ajprogramming.TouchMouse.Network.MessageCreator;
 import ajprogramming.TouchMouse.Network.Messages.TCPMessage;
@@ -16,6 +19,8 @@ import java.io.*;
 import java.net.Socket;
 
 public class Mouse extends Thread implements IMouse{
+
+    private Keyboard keyboard;
     private final MouseHandler mouseHandler;
     private final IHost host;
     private boolean isConnected = false;
@@ -28,11 +33,14 @@ public class Mouse extends Thread implements IMouse{
     private  String mouseId;
     private EConnectionStatus connectionStatus;
     private MessageBuffer messageBuffer;
+    private final KeyboardMessageBuffer keyboardMessageBuffer;
 
     public Mouse(Socket tcpSocket, MouseHandler mouseHandler, TCPMessage tcpMessage, IHost host) {
         try {
             this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
+            this.keyboardMessageBuffer = new KeyboardMessageBuffer();
             this.messageBuffer = new MessageBuffer();
+            this.keyboard = new Keyboard(this.keyboardMessageBuffer);
             this.mouseMove = new MouseMove(this.messageBuffer);
             this.mouseMove.start();
             this.host = host;
@@ -92,10 +100,19 @@ public class Mouse extends Thread implements IMouse{
     }
 
     public void addMsg(UDPMessage udpMessage) {
-        this.messageBuffer.put(udpMessage);
-        synchronized (this.mouseMove) {
-            this.mouseMove.notify();
+        if (udpMessage.getType() == UDPMessageTypeEnum.KEYBOARD) {
+            this.keyboardMessageBuffer.put(udpMessage);
+            synchronized (this.keyboard) {
+                this.keyboard.notify();
+            }
+        } else {
+            this.messageBuffer.put(udpMessage);
+
+            synchronized (this.mouseMove) {
+                this.mouseMove.notify();
+            }
         }
+
     }
 
     @Override
@@ -211,14 +228,24 @@ public class Mouse extends Thread implements IMouse{
             this.connectionStatus = EConnectionStatus.FAIL;
             this.loggerEx.info("Destroying socket");
             this.sendDisconnectMessage();
-            this.mouseMove.interrupt();
-            this.mouseMove = null;
+            this.stopKeyboard();
+            this.stopMouseMove();
             this.tcpSocket.close();
             this.tcpSocket = null;
             this.interrupt();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void stopMouseMove() {
+        this.mouseMove.interrupt();
+        this.mouseMove = null;
+    }
+
+    private void stopKeyboard() {
+        this.keyboard.interrupt();
+        this.keyboard = null;
     }
 
 
