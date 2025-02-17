@@ -57,7 +57,7 @@ public class ConnectionActivity extends BaseActivity {
 
     private void initMainApp() {
         Log.d("APP_MAIN", "Displays main app screen");
-        this.networkModule.initialize();
+        this.networkService.initialize();
         setContentView(binding.getRoot());
 
     }

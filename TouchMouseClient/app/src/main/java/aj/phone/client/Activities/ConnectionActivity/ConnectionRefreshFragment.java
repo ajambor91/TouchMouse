@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 import aj.phone.client.Core.ActivitiesManager;
 import aj.phone.client.Core.DIModule;
-import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.NetworkModule.NetworkService;
 import aj.phone.client.R;
 import aj.phone.client.databinding.ConnectionFragmentRefreshBinding;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class ConnectionRefreshFragment extends Fragment {
     @Inject
     public DIModule diModule;
-    private NetworkModule networkModule;
+    private NetworkService networkService;
     private ActivitiesManager activitiesManager;
     private ConnectionFragmentRefreshBinding binding;
 
@@ -37,7 +37,7 @@ public class ConnectionRefreshFragment extends Fragment {
     ) {
         Log.d("REFRESH", "Initializing reconnecting screen");
         View view = inflater.inflate(R.layout.connection_fragment_refresh, container, false);
-        this.networkModule = this.diModule.getNetworkModule();
+        this.networkService = this.diModule.getNetworkModule();
         this.activitiesManager = this.diModule.getActivitiesManager();
         Log.d("REFRESH", "Get activities manager");
 
@@ -69,7 +69,7 @@ public class ConnectionRefreshFragment extends Fragment {
     private void reconnect() {
         Log.d("REFRESH", "Refreshing");
         this.activitiesManager.runScreen(R.id.fragmentContainerView, ConnectionMainFragment.class);
-        this.networkModule.reconnect();
+        this.networkService.reconnect();
     }
 
 }

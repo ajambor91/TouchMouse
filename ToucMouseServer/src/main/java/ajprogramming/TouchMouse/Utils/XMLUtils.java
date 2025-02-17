@@ -1,24 +1,11 @@
 package ajprogramming.TouchMouse.Utils;
 
 
-
 import ajprogramming.TouchMouse.AppConfig;
 import ajprogramming.TouchMouse.Mouse.IMouse;
 import ajprogramming.TouchMouse.Mouse.SavedMouse;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.NoSuchElementException;
-import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,6 +15,13 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 
 public class XMLUtils {
@@ -113,7 +107,6 @@ public class XMLUtils {
         idAttr.setValue(id);
         newElement.setAttributeNode(idAttr);
         newElement.setIdAttribute("id", true);
-        System.out.println("Created new markdown element");
         return newElement;
     }
 
@@ -230,7 +223,6 @@ public class XMLUtils {
         DOMSource source = new DOMSource(document);
         StreamResult result = new StreamResult(new File(AppConfig.getInstance().getAppDataPath() + configFileName));
         transformer.transform(source, result);
-        System.out.println("Saved document");
     }
 
     private static Document initializeDocument() throws ParserConfigurationException, IOException, SAXException {
@@ -243,7 +235,6 @@ public class XMLUtils {
     }
 
     public static void initializeConfigOnFirstRun() throws ParserConfigurationException, IOException, SAXException, TransformerException {
-        System.out.println("Initializiing config");
         Document document = XMLUtils.initializeDocument();
         Element nameElement = (Element) document.getElementsByTagName(XMLUtils.mouseNameTag).item(0);
         Element config = (Element) document.getElementsByTagName(XMLUtils.hostTagName).item(0);
@@ -287,7 +278,6 @@ public class XMLUtils {
     }
 
     public static void setOption(String optionName, String optionValue) throws ParserConfigurationException, IOException, SAXException, TransformerException {
-        System.out.println( String.format("Set option %s with %s value", optionName, optionValue));
         Document document = XMLUtils.initializeDocument();
         Element nameElement = (Element) document.getElementsByTagName(optionName).item(0);
         Attr nameAttr = nameElement.getAttributeNode("name");
@@ -296,7 +286,6 @@ public class XMLUtils {
     }
 
     public static String getOption(String optionName, String attribute) throws ParserConfigurationException, IOException, SAXException {
-        System.out.println( String.format("Get option %s", optionName));
         Document document = XMLUtils.initializeDocument();
         Element optionEl = (Element) document.getElementsByTagName(optionName).item(0);
         if (optionEl == null) {

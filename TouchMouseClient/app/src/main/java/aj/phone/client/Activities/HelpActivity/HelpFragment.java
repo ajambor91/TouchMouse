@@ -18,7 +18,7 @@ import aj.phone.client.Activities.TouchPadActivity.TouchPadActivity;
 import aj.phone.client.Core.ActivitiesManager;
 import aj.phone.client.Core.DIModule;
 import aj.phone.client.NetworkModule.Enums.EConnectionStatus;
-import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.NetworkModule.NetworkService;
 import aj.phone.client.R;
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -28,7 +28,7 @@ public class HelpFragment extends Fragment {
     @Inject
     public DIModule diModule;
 
-    private NetworkModule networkModule;
+    private NetworkService networkService;
     private ActivitiesManager activitiesManager;
     private Button backBtn;
 
@@ -45,7 +45,7 @@ public class HelpFragment extends Fragment {
                              Bundle savedInstanceState) {
         assert container != null;
         this.activitiesManager = this.diModule.getActivitiesManager();
-        this.networkModule = this.diModule.getNetworkModule();
+        this.networkService = this.diModule.getNetworkModule();
         View view = inflater.inflate(R.layout.help_fragment, container, false);
         this.backBtn = view.findViewById(R.id.help_back_btn);
 
@@ -81,10 +81,10 @@ public class HelpFragment extends Fragment {
     }
 
     private void back() {
-        if (this.networkModule.getConnectionStatus() == EConnectionStatus.CONNECTED) {
+        if (this.networkService.getConnectionStatus() == EConnectionStatus.CONNECTED) {
             this.activitiesManager.runActivity(TouchPadActivity.class);
 
-        } else if (this.networkModule.getConnectionStatus() == EConnectionStatus.FAIL || this.networkModule.getConnectionStatus() == EConnectionStatus.DISCONNECTED) {
+        } else if (this.networkService.getConnectionStatus() == EConnectionStatus.FAIL || this.networkService.getConnectionStatus() == EConnectionStatus.DISCONNECTED) {
             this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
 
         } else {

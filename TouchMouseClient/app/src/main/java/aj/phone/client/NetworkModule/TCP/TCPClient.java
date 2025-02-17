@@ -15,19 +15,21 @@ import aj.phone.client.NetworkModule.Enums.MessageTypes;
 import aj.phone.client.NetworkModule.Enums.TCPMessageTypeEnum;
 import aj.phone.client.NetworkModule.Message.MessageCreator;
 import aj.phone.client.NetworkModule.Message.TCPMessage;
-import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.NetworkModule.NetworkService;
 import aj.phone.client.Utils.Config;
 
 public class TCPClient extends Thread {
+
+
     private final TCPMessageBuffer tcpMessageBuffer;
 
-    private final NetworkModule networkModule;
+    private final NetworkService networkService;
     private volatile boolean running = true;
     private TCPSender tcpSender;
     private Socket socket;
 
-    public TCPClient(NetworkModule networkModule, TCPMessageBuffer tcpMessageBuffer) {
-        this.networkModule = networkModule;
+    public TCPClient(NetworkService networkService, TCPMessageBuffer tcpMessageBuffer) {
+        this.networkService = networkService;
         this.tcpMessageBuffer = tcpMessageBuffer;
     }
 
@@ -37,18 +39,18 @@ public class TCPClient extends Thread {
 
         while (this.running) {
             try {
-                this.socket.connect(new InetSocketAddress(this.networkModule.getHostAddress(), 9123), 5000);
+                this.socket.connect(new InetSocketAddress(this.networkService.getHostAddress(), 9123), 5000);
                 if (this.tcpSender == null) {
                     this.tcpSender = new TCPSender(socket, this.tcpMessageBuffer);
 
                 }
 
                 Log.d("TCP", "Connected to host");
-                this.initConnection();
+//                this.initConnection();
                 this.listenForMessage(this.socket);
             } catch (SocketException socketException) {
-                if (this.networkModule.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
-                    this.networkModule.processTCPSocketException();
+                if (this.networkService.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
+                    this.networkService.processTCPSocketException();
                 }
                 this.running = false;
 
@@ -79,12 +81,12 @@ public class TCPClient extends Thread {
 
     private void initConnection() throws IOException {
         MessageCreator messageCreator = null;
-        if (this.networkModule.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
+        if (this.networkService.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
             Log.d("TCP", "Creating welcome message");
-            messageCreator = new MessageCreator(this.networkModule.getAppId(), null, this.networkModule.getHostAddress(), this.networkModule.getAddress(), this.networkModule.getMouseName(), this.networkModule.getAppName(), TCPMessageTypeEnum.CONNECTION);
+            messageCreator = new MessageCreator(this.networkService.getAppId(), null, this.networkService.getHostAddress(), this.networkService.getAddress(), this.networkService.getMouseName(), this.networkService.getAppName(), TCPMessageTypeEnum.CONNECTION);
         } else {
             Log.d("TCP", "Creating reconnect message");
-            messageCreator = new MessageCreator(this.networkModule.getAppId(), null, this.networkModule.getHostAddress(), this.networkModule.getAddress(), this.networkModule.getMouseName(), this.networkModule.getAppName(), TCPMessageTypeEnum.RECONNECT);
+            messageCreator = new MessageCreator(this.networkService.getAppId(), null, this.networkService.getHostAddress(), this.networkService.getAddress(), this.networkService.getMouseName(), this.networkService.getAppName(), TCPMessageTypeEnum.RECONNECT);
         }
 
         TCPMessage tcpMessage = (TCPMessage) messageCreator.getMessage();
@@ -105,17 +107,17 @@ public class TCPClient extends Thread {
                 Log.d("TCP", String.format("Received message: %s", message));
                 MessageCreator messageCreator = new MessageCreator(message, MessageTypes.TCP);
                 Log.d("TCP", String.format("Converted message: %s", messageCreator.jsonfyMessage()));
-                Config.getInstance().addHost(this.networkModule);
+                Config.getInstance().addHost(this.networkService);
                 this.processMessage((TCPMessage) messageCreator.getMessage());
             }
             Log.d("TCP", "Socket closed");
         } catch (SocketException socketException) {
             Log.d("TCP", "Socket closed");
 
-            if (this.networkModule.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
+            if (this.networkService.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
                 Log.d("TCP", "Socket closed");
 
-                this.networkModule.processHostDisconnect();
+                this.networkService.processHostDisconnect();
             }
 
         }
@@ -125,13 +127,13 @@ public class TCPClient extends Thread {
         Log.d("TCP", String.format("Processing TCP message with action %s", tcpMessage.getType().getMessageType()));
         if (tcpMessage.getType() == TCPMessageTypeEnum.CONNECTION) {
             Log.d("TCP", "Processing connection message");
-            this.networkModule.processNewConnection();
+            this.networkService.processNewConnection();
         } else if (tcpMessage.getType() == TCPMessageTypeEnum.DISCONNECT) {
             Log.d("TCP", "Processing disconnection message");
-            this.networkModule.processDisconnectMessage();
+            this.networkService.processDisconnectMessage();
         } else if (tcpMessage.getType() == TCPMessageTypeEnum.RECONNECT_ANSWER) {
             Log.d("TCP", "Processing connection message");
-            this.networkModule.processReconnecting();
+            this.networkService.processReconnecting();
         }
 
     }

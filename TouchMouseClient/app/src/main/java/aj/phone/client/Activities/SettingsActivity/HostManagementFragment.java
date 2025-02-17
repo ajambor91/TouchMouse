@@ -20,7 +20,7 @@ import aj.phone.client.Core.ActivitiesManager;
 import aj.phone.client.Core.DIModule;
 import aj.phone.client.Core.HostManager;
 import aj.phone.client.IHost;
-import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.NetworkModule.NetworkService;
 import aj.phone.client.R;
 import aj.phone.client.databinding.HostManagementFragmentBinding;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -30,7 +30,7 @@ public class HostManagementFragment extends Fragment {
     private final IHost currentHost;
     @Inject
     public DIModule diModule;
-    private NetworkModule networkModule;
+    private NetworkService networkService;
     private Button backButton;
     private TextView hostnameText;
     private Button removeButton;
@@ -50,7 +50,7 @@ public class HostManagementFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        this.networkModule = this.diModule.getNetworkModule();
+        this.networkService = this.diModule.getNetworkModule();
         this.activitiesManager = this.diModule.getActivitiesManager();
         Log.d("HOST", "Host management initialized");
         binding = HostManagementFragmentBinding.inflate(inflater, container, false);

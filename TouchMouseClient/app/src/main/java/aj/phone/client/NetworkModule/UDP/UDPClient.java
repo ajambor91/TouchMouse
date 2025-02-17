@@ -13,18 +13,18 @@ import aj.phone.client.NetworkModule.Enums.EMouseTouchType;
 import aj.phone.client.NetworkModule.Message.MessageCreator;
 import aj.phone.client.NetworkModule.Message.Touch;
 import aj.phone.client.NetworkModule.Message.UDPMessage;
-import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.NetworkModule.NetworkService;
 
 
 public class UDPClient extends Thread {
     private final MessageBuffer messageBuffer;
-    private final NetworkModule networkModule;
+    private final NetworkService networkService;
     private DatagramSocket datagramSocket;
     private UDPMessage message;
 
-    public UDPClient(NetworkModule networkModule) {
+    public UDPClient(NetworkService networkService) {
         this.messageBuffer = new MessageBuffer();
-        this.networkModule = networkModule;
+        this.networkService = networkService;
     }
 
     public void stopService() {
@@ -50,8 +50,8 @@ public class UDPClient extends Thread {
     public void run() {
         try {
             this.datagramSocket = new DatagramSocket();
-            InetAddress ipAddr = InetAddress.getByName(this.networkModule.getHostAddress());
-            Log.d("UDP", String.format("UDP initialized with host adrress: %s", this.networkModule.getHostAddress()));
+            InetAddress ipAddr = InetAddress.getByName(this.networkService.getHostAddress());
+            Log.d("UDP", String.format("UDP initialized with host adrress: %s", this.networkService.getHostAddress()));
             while (true) {
                 sleep(10);
                 if (!this.messageBuffer.isEmpty()) {

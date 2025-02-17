@@ -17,7 +17,7 @@ import aj.phone.client.Activities.HelpActivity.HelpActivity;
 import aj.phone.client.Activities.SettingsActivity.SettingsActivity;
 import aj.phone.client.Core.ActivitiesManager;
 import aj.phone.client.Core.DIModule;
-import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.NetworkModule.NetworkService;
 import aj.phone.client.R;
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -27,7 +27,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Inject
     public DIModule diModule;
-    protected NetworkModule networkModule;
+    protected NetworkService networkService;
     protected ActivitiesManager activitiesManager;
 
     @Override
@@ -40,8 +40,8 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.activitiesManager = this.diModule.getActivitiesManager();
         Log.d("BASE ACTIVITY", "Creating new activity");
-        this.networkModule = this.diModule.getNetworkModule();
-        this.networkModule.setActivitiesManager(this.activitiesManager);
+        this.networkService = this.diModule.getNetworkModule();
+        this.networkService.setActivitiesManager(this.activitiesManager);
         this.activitiesManager.setCurrentActivity(this);
 
     }

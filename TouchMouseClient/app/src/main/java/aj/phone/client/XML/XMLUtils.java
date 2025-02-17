@@ -123,6 +123,7 @@ public class XMLUtils {
                 String ip = element.getAttributeNode("address").getValue();
                 String name = element.getAttributeNode("name").getValue();
                 String defaultHost = element.getAttributeNode("default").getValue();
+
                 host.setIsDefault(defaultHost.equals("true"));
                 host.setHostAddress(ip);
                 host.setActiveHost(false);

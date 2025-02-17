@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 import aj.phone.client.Core.DIModule;
 import aj.phone.client.Core.MouseMove;
-import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.NetworkModule.NetworkService;
 import aj.phone.client.R;
 import aj.phone.client.databinding.ActivityTouchpadBinding;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -30,7 +30,7 @@ public class TouchpadMainFragment extends Fragment {
     private ActivityTouchpadBinding binding;
 
     private MouseMove mouseMove;
-    private NetworkModule networkModule;
+    private NetworkService networkService;
 
     public TouchpadMainFragment() throws Exception {
         super(R.layout.touchpad_fragment_main);
@@ -44,8 +44,8 @@ public class TouchpadMainFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         this.mouseMove = this.diModule.getMouseMove();
-        this.networkModule = this.diModule.getNetworkModule();
-        this.mouseMove.setNetworkModule(this.networkModule);
+        this.networkService = this.diModule.getNetworkModule();
+        this.mouseMove.setNetworkModule(this.networkService);
         Log.d("TOUCHPAD", "Initialized touchpad fragment");
         View view = inflater.inflate(R.layout.touchpad_fragment_main, container, false);
         this.addTouchEvent(view);
@@ -56,7 +56,7 @@ public class TouchpadMainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        NetworkModule networkModuleL = this.networkModule;
+        NetworkService networkServiceL = this.networkService;
         MouseMove move = this.mouseMove;
         Log.d("TOUCHPAD", "Adding event into screen");
 

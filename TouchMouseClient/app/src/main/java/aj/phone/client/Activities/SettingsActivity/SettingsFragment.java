@@ -27,7 +27,7 @@ import aj.phone.client.Core.ActivitiesManager;
 import aj.phone.client.Core.DIModule;
 import aj.phone.client.IHost;
 import aj.phone.client.NetworkModule.Enums.EConnectionStatus;
-import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.NetworkModule.NetworkService;
 import aj.phone.client.R;
 import aj.phone.client.Utils.Config;
 import aj.phone.client.databinding.SettingsFragmentBinding;
@@ -39,7 +39,7 @@ public class SettingsFragment extends Fragment {
 
     @Inject
     public DIModule diModule;
-    private NetworkModule networkModule;
+    private NetworkService networkService;
     private ActivitiesManager activitiesManager;
     private Config config;
     private EditText mouseName;
@@ -55,7 +55,7 @@ public class SettingsFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         this.activitiesManager = this.diModule.getActivitiesManager();
-        this.networkModule = this.diModule.getNetworkModule();
+        this.networkService = this.diModule.getNetworkModule();
         this.addActionOnBack();
         View rootView = inflater.inflate(R.layout.settings_fragment, container, false);
         this.setElements(rootView);
@@ -94,7 +94,7 @@ public class SettingsFragment extends Fragment {
         String newName = this.mouseName.getText().toString();
         Log.d("Settings", String.format("New mouse name: %s", newName));
         Config.getInstance().changeMouseName(newName);
-        this.networkModule.changeName(newName);
+        this.networkService.changeName(newName);
     }
 
     private void addActionOnBack() {
@@ -112,7 +112,7 @@ public class SettingsFragment extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) { // Obsługa "Enter"
                     String newName = mouseName.getText().toString();
-                    networkModule.changeName(newName);
+                    networkService.changeName(newName);
                     return true;
                 }
                 return false;
@@ -145,8 +145,8 @@ public class SettingsFragment extends Fragment {
             if (this.hostListAdapter.getCurrentHost() != null) {
                 Log.d("Settings", "Creating host management fragment");
                 IHost host = this.hostListAdapter.getCurrentHost();
-                if (this.hostListAdapter.getCurrentHost().getHostAddress().equals(this.networkModule.getHostAddress())) {
-                    host = this.networkModule;
+                if (this.hostListAdapter.getCurrentHost().getHostAddress().equals(this.networkService.getHostAddress())) {
+                    host = this.networkService;
                 }
                 Fragment hostManagementFragment = new HostManagementFragment(host);
                 FragmentTransaction ft = fm.beginTransaction().replace(R.id.settings_container_view, hostManagementFragment);
@@ -162,10 +162,10 @@ public class SettingsFragment extends Fragment {
     }
 
     private void back() {
-        if (this.networkModule.getConnectionStatus() == EConnectionStatus.CONNECTED) {
+        if (this.networkService.getConnectionStatus() == EConnectionStatus.CONNECTED) {
             this.activitiesManager.runActivity(TouchPadActivity.class);
 
-        } else if (this.networkModule.getConnectionStatus() == EConnectionStatus.FAIL || this.networkModule.getConnectionStatus() == EConnectionStatus.DISCONNECTED) {
+        } else if (this.networkService.getConnectionStatus() == EConnectionStatus.FAIL || this.networkService.getConnectionStatus() == EConnectionStatus.DISCONNECTED) {
             this.activitiesManager.runActivityWithScreen(ConnectionActivity.class);
 
         } else {

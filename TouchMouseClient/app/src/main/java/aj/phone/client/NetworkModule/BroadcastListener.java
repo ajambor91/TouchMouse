@@ -15,10 +15,10 @@ import aj.phone.client.NetworkModule.Message.MessageCreator;
 public class BroadcastListener extends Thread {
 
     private final int timeout = 25000;
-    private final NetworkModule networkModule;
+    private final NetworkService networkService;
 
-    public BroadcastListener(NetworkModule networkModule) {
-        this.networkModule = networkModule;
+    public BroadcastListener(NetworkService networkService) {
+        this.networkService = networkService;
     }
 
     @Override
@@ -33,12 +33,12 @@ public class BroadcastListener extends Thread {
 
             datagramSocket.receive(datagramPacket);
             MessageCreator messageCreator = new MessageCreator(new String(datagramPacket.getData(), 0, datagramPacket.getLength(), StandardCharsets.UTF_8), MessageTypes.BROADCAST);
-            this.networkModule.runTCP((BroadcastMessage) messageCreator.getMessage());
+            this.networkService.runTCP((BroadcastMessage) messageCreator.getMessage());
         } catch (SocketTimeoutException socketTimeoutException) {
             Log.d("BROADCAST", "Cannot received broadcast data");
             socket.close();
-            if (this.networkModule.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
-                this.networkModule.onBroadcastTimeout();
+            if (this.networkService.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {
+                this.networkService.onBroadcastTimeout();
 
             }
 

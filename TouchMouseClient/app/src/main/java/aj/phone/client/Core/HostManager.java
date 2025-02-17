@@ -4,19 +4,19 @@ import android.util.Log;
 
 import aj.phone.client.IHost;
 import aj.phone.client.NetworkModule.Host;
-import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.NetworkModule.NetworkService;
 import aj.phone.client.Utils.Config;
 
 public class HostManager {
 
     private final Config config;
-    private NetworkModule activeHost;
+    private NetworkService activeHost;
     private Host currentHost;
 
     public HostManager(IHost host) {
         this.config = Config.getInstance();
-        if (host instanceof NetworkModule) {
-            this.activeHost = (NetworkModule) host;
+        if (host instanceof NetworkService) {
+            this.activeHost = (NetworkService) host;
             Log.d("HOST MANAGER", "Set active host");
 
             this.currentHost = (Host) host;

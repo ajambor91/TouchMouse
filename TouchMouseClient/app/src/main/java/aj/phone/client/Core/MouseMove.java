@@ -6,13 +6,13 @@ import android.view.MotionEvent;
 import aj.phone.client.NetworkModule.Enums.EEventStage;
 import aj.phone.client.NetworkModule.Enums.EMouseTouch;
 import aj.phone.client.NetworkModule.Enums.EMouseTouchType;
-import aj.phone.client.NetworkModule.NetworkModule;
+import aj.phone.client.NetworkModule.NetworkService;
 
 
 public class MouseMove {
     private static MouseMove instance;
     private EEventStage eventStage = EEventStage.INITIALIZED;
-    private NetworkModule networkModule;
+    private NetworkService networkService;
     private float deltaX = 0;
     private float deltaY = 0;
     private float startY = 0;
@@ -30,8 +30,8 @@ public class MouseMove {
         return MouseMove.instance;
     }
 
-    public void setNetworkModule(NetworkModule networkModule) {
-        this.networkModule = networkModule;
+    public void setNetworkModule(NetworkService networkService) {
+        this.networkService = networkService;
     }
 
     public boolean runMouse(MotionEvent event) {
@@ -74,7 +74,7 @@ public class MouseMove {
             this.isLPMDown = true;
             this.eventStage = EEventStage.PROGRESS;
             Log.d("Touch", String.format("Down mowe y: %s, x: %s", event.getY(), event.getX()));
-            this.networkModule.setTouchUDPMessage(EMouseTouch.SINGLE_LPM, EMouseTouchType.DOWN);
+            this.networkService.setTouchUDPMessage(EMouseTouch.SINGLE_LPM, EMouseTouchType.DOWN);
 
             Log.d("Touch", "Detected single click");
         }
@@ -86,7 +86,7 @@ public class MouseMove {
             Log.d("Touch", "Detected double touch");
             this.isPPMDown = true;
             this.isLPMDown = false;
-            this.networkModule.setTouchUDPMessage(EMouseTouch.SINGLE_PPM, EMouseTouchType.DOWN);
+            this.networkService.setTouchUDPMessage(EMouseTouch.SINGLE_PPM, EMouseTouchType.DOWN);
         }
     }
 
@@ -103,12 +103,12 @@ public class MouseMove {
         if (event.getPointerCount() > 1) {
             if (deltaY > 1) {
                 this.eventStage = EEventStage.SCROLL;
-                this.networkModule.setTouchUDPMessage(1);
+                this.networkService.setTouchUDPMessage(1);
                 Log.d("Touch", "Detected double ACTION MOVE");
                 return true;
             } else if (deltaY < -1) {
                 this.eventStage = EEventStage.SCROLL;
-                this.networkModule.setTouchUDPMessage(-1);
+                this.networkService.setTouchUDPMessage(-1);
                 Log.d("Touch", "Detected double ACTION MOVE");
                 return true;
             }
@@ -116,7 +116,7 @@ public class MouseMove {
         }
         if (event.getPointerCount() == 1 && Math.abs(deltaX) > 1 || Math.abs(deltaY) > 1) {
 
-            this.networkModule.setTouchUDPMessage((int) deltaX, (int) deltaY);
+            this.networkService.setTouchUDPMessage((int) deltaX, (int) deltaY);
 
             Log.d("Touch", "Moving: X=" + deltaX + ", Y=" + deltaY);
             return true;
@@ -134,8 +134,8 @@ public class MouseMove {
     private void onPPMUp(MotionEvent event) {
         Log.d("Touch", String.format("Detected touches, LPM: %b, PPM: %b", lpmButton, isPPMDown));
         if (this.isPPMDown && this.eventStage == EEventStage.PPM_INIT && event.getPointerCount() > 1) {
-            this.networkModule.setTouchUDPMessage(EMouseTouch.SINGLE_PPM, EMouseTouchType.UP);
-            this.networkModule.setTouchUDPMessage(EMouseTouch.SINGLE_LPM, EMouseTouchType.UP);
+            this.networkService.setTouchUDPMessage(EMouseTouch.SINGLE_PPM, EMouseTouchType.UP);
+            this.networkService.setTouchUDPMessage(EMouseTouch.SINGLE_LPM, EMouseTouchType.UP);
             this.isPPMDown = false;
             this.eventStage = EEventStage.FINISHED;
 
@@ -150,7 +150,7 @@ public class MouseMove {
             Log.d("Touch", "Touch screen");
 
         }
-        this.networkModule.setTouchUDPMessage(EMouseTouch.SINGLE_LPM, EMouseTouchType.UP);
+        this.networkService.setTouchUDPMessage(EMouseTouch.SINGLE_LPM, EMouseTouchType.UP);
         lpmButton = false;
         this.isLPMDown = false;
         this.eventStage = EEventStage.FINISHED;

@@ -26,16 +26,16 @@ import aj.phone.client.NetworkModule.TCP.TCPMessageBuffer;
 import aj.phone.client.NetworkModule.UDP.UDPClient;
 import aj.phone.client.Utils.Config;
 
-public class NetworkModule extends MouseInet {
+public class NetworkService extends MouseInet {
 
-    private static NetworkModule instance;
+    private static NetworkService instance;
     private TCPMessageBuffer tcpMessageBuffer;
     private ActivitiesManager activitiesManager;
     private UDPClient udpClient;
     private TCPClient tcpClient;
     private BroadcastListener broadcastListener;
 
-    private NetworkModule() {
+    private NetworkService() {
         this.tcpMessageBuffer = new TCPMessageBuffer();
         this.initializeSelfObject();
         this.tcpClient = new TCPClient(this, this.tcpMessageBuffer);
@@ -43,11 +43,11 @@ public class NetworkModule extends MouseInet {
         this.broadcastListener = new BroadcastListener(this);
     }
 
-    public static NetworkModule getInstance() {
-        if (NetworkModule.instance == null) {
-            NetworkModule.instance = new NetworkModule();
+    public static NetworkService getInstance() {
+        if (NetworkService.instance == null) {
+            NetworkService.instance = new NetworkService();
         }
-        return NetworkModule.instance;
+        return NetworkService.instance;
     }
 
     public void setActivitiesManager(ActivitiesManager activitiesManager) {
@@ -63,6 +63,8 @@ public class NetworkModule extends MouseInet {
                 this.tcpClient.stopService();
             }
             this.tcpMessageBuffer = new TCPMessageBuffer();
+            TCPMessage tcpMessage = (TCPMessage) this.createMessageCreator(TCPMessageTypeEnum.RECONNECT).getMessage();
+            this.tcpMessageBuffer.addMessage(tcpMessage);
             this.setHostAddress(host.getHostAddress());
             this.udpClient = new UDPClient(this);
             this.tcpClient = new TCPClient(this, this.tcpMessageBuffer);
@@ -76,6 +78,8 @@ public class NetworkModule extends MouseInet {
     public void runTCP(BroadcastMessage message) {
         Log.d("TCP", String.format("Run TCP for message appName: %s with self appName: %s", message.getAppName(), this.getAppName()));
         if (message.getAppName().equals(this.getAppName())) {
+            TCPMessage tcpMessage = (TCPMessage) this.createMessageCreator(TCPMessageTypeEnum.CONNECTION).getMessage();
+            this.tcpMessageBuffer.addMessage(tcpMessage);
             String hostAddress = message.getHostAddress();
             this.setHostAddress(hostAddress);
             this.tcpClient.start();
@@ -205,7 +209,7 @@ public class NetworkModule extends MouseInet {
     }
 
     private void processConnection() {
-        this.runUDP();
+        this.udpClient.start();
         this.activitiesManager.runActivity(TouchPadActivity.class);
     }
 
@@ -265,10 +269,5 @@ public class NetworkModule extends MouseInet {
                 this.getAppName(),
                 tcpMessageTypeEnum
         );
-    }
-
-    private void runUDP() {
-        Log.d("UDP", "Initilizing UDP");
-        this.udpClient.start();
     }
 }
