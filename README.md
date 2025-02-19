@@ -67,8 +67,10 @@ In the desktop application you can remove and disconnect phone touchpad. Also yo
 All screenshots are from a physical device
 
 ## Realease
-You can now download the built applications. The app-based code is in the release branch.  Windows and Android apps v0.1.0 are currently available.
-https://ftp.adamantum.site/TouchMouse/
+#### Windows and Android apps v0.2.0 are currently available.
+The app's codebase is on a versioned release branch, such as release_0.2.0.
+Make sure that the mobile and desktop applications you download are the same version, downloading different versions may cause different results.    
+<https://ftp.adamantum.site/TouchMouse/>    
 Note: On Android, you have to enable the "Install from unknown sources" option. On Windows, the application is not signed, so Windows Smart Screen will warn you that the application might harm your system. However, this is not true. All the apps are safe.
 
 
