@@ -1,5 +1,6 @@
 package ajprogramming.TouchMouse;
 
+import ajprogramming.TouchMouse.Keyboard.KeyArrays.*;
 import ajprogramming.TouchMouse.Menus.MainFrame;
 import ajprogramming.TouchMouse.Mouse.MouseMove;
 import ajprogramming.TouchMouse.Network.NetworkService;
@@ -22,6 +23,11 @@ public class TouchMouse {
 
     private TouchMouse() {
         this.app = new App();
+//        SpecialCharsToVkCodes.initialize();
+//            CombinedChars.initialize();
+//            LowCasedLettersVKCodes.initialize();
+//            CapitalLettersVKCodes.initialize();
+//            DiactricChars.initialize();
         this.tray = Tray.getInstance();
         this.networkService = NetworkService.getInstance();
     }

@@ -3,6 +3,7 @@ package aj.phone.client.NetworkModule.Enums;
 public enum UDPMessageTypeEnum {
     MOVE("move"),
     TOUCH("touch"),
+    KEYBOARD("keyboard"),
     SCROLL("scroll");
 
     private final String messageType;

@@ -4,13 +4,13 @@ import ajprogramming.TouchMouse.Network.UDPAction;
 
 public class KeyboardKey implements UDPAction {
 
-    private int keyCode;
+    private String keyCode;
 
-    public void setKeyCode(int keyCode) {
+    public void setKeyCode(String keyCode) {
         this.keyCode = keyCode;
     }
 
-    public int getKeyCode() {
+    public String getKeyCode() {
         return this.keyCode;
     }
 }

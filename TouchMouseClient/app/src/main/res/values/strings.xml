@@ -20,5 +20,7 @@
     <string name="remove_host">Remove host</string>
     <string name="back">Back</string>
     <string name="host_manager">Host Manager</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

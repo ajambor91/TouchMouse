@@ -15,6 +15,7 @@ import dagger.hilt.components.SingletonComponent;
 @InstallIn(SingletonComponent.class)
 public class DIModule {
 
+    private final Keyboard keyboard;
     private final MouseMove mouseMove;
     private final NetworkService networkService;
     private final ActivitiesManager activitiesManager;
@@ -25,6 +26,7 @@ public class DIModule {
         this.networkService = NetworkService.getInstance();
         this.activitiesManager = ActivitiesManager.getInstance();
         this.mouseMove = MouseMove.getInstance();
+        this.keyboard = Keyboard.getInstance();
     }
 
     @Provides
@@ -40,5 +42,10 @@ public class DIModule {
     @Provides
     public ActivitiesManager getActivitiesManager() {
         return this.activitiesManager;
+    }
+
+    @Provides
+    public Keyboard getKeyboard() {
+        return this.keyboard;
     }
 }

@@ -8,10 +8,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-import aj.phone.client.NetworkModule.Enums.EMouseTouch;
-import aj.phone.client.NetworkModule.Enums.EMouseTouchType;
 import aj.phone.client.NetworkModule.Message.MessageCreator;
-import aj.phone.client.NetworkModule.Message.Touch;
 import aj.phone.client.NetworkModule.Message.UDPMessage;
 import aj.phone.client.NetworkModule.NetworkService;
 
@@ -35,14 +32,9 @@ public class UDPClient extends Thread {
     }
 
     public void setMessage(UDPMessage message) {
-        if (message.getAction() instanceof Touch &&
-                ((Touch) message.getAction()).getClick() == EMouseTouch.SINGLE_LPM &&
-                ((Touch) message.getAction()).getClickType() == EMouseTouchType.UP
-        ) {
-            this.messageBuffer.putLastMsg(message);
-        } else {
-            this.messageBuffer.put(message);
-        }
+        Log.d("Keyboard", "In udp client msg " + message.getAction());
+        this.messageBuffer.put(message);
+
     }
 
 
@@ -55,6 +47,7 @@ public class UDPClient extends Thread {
             while (true) {
                 sleep(10);
                 if (!this.messageBuffer.isEmpty()) {
+                    Log.d("Keyboard", "UDP MEssage");
                     byte[] msg = this.parseMessage(this.messageBuffer.getMessage());
                     DatagramPacket send_packet = new DatagramPacket(msg, msg.length, ipAddr, 9123);
                     this.datagramSocket.send(send_packet);
@@ -78,6 +71,7 @@ public class UDPClient extends Thread {
 
     private byte[] parseMessage(UDPMessage[] message) {
         MessageCreator messageCreator = new MessageCreator(message);
+        Log.d("Keyboard", messageCreator.jsonfyBufferedMessage());
         return messageCreator.bytefyBufferMessage();
     }
 

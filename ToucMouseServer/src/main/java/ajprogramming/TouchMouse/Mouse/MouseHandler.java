@@ -78,9 +78,14 @@ public class MouseHandler {
     }
 
     public void onAction(List<UDPMessage> message) {
+        System.out.println("IIIIIII");
+
         message.forEach(msg -> {
             Mouse mouse = (Mouse) this.mouseHashMap.get(msg.getMouseId());
+            System.out.println("IIIIIII");
             if (mouse != null) {
+                System.out.println("ZZZZZZZZZZZZZZZZ");
+
                 mouse.addMsg(msg);
             } else {
                 this.loggerEx.info("Cannot find mouse for action", msg.getMouseId());

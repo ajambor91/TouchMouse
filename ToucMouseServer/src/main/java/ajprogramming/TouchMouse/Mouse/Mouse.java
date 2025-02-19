@@ -33,14 +33,12 @@ public class Mouse extends Thread implements IMouse{
     private  String mouseId;
     private EConnectionStatus connectionStatus;
     private MessageBuffer messageBuffer;
-    private final KeyboardMessageBuffer keyboardMessageBuffer;
+    private KeyboardMessageBuffer keyboardMessageBuffer;
 
     public Mouse(Socket tcpSocket, MouseHandler mouseHandler, TCPMessage tcpMessage, IHost host) {
         try {
             this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
-            this.keyboardMessageBuffer = new KeyboardMessageBuffer();
             this.messageBuffer = new MessageBuffer();
-            this.keyboard = new Keyboard(this.keyboardMessageBuffer);
             this.mouseMove = new MouseMove(this.messageBuffer);
             this.mouseMove.start();
             this.host = host;
@@ -101,13 +99,15 @@ public class Mouse extends Thread implements IMouse{
 
     public void addMsg(UDPMessage udpMessage) {
         if (udpMessage.getType() == UDPMessageTypeEnum.KEYBOARD) {
+            System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRR");
+
             this.keyboardMessageBuffer.put(udpMessage);
             synchronized (this.keyboard) {
                 this.keyboard.notify();
             }
         } else {
             this.messageBuffer.put(udpMessage);
-
+            System.out.printf("XXXX %s", udpMessage.getType().getMessageType());
             synchronized (this.mouseMove) {
                 this.mouseMove.notify();
             }
@@ -143,7 +143,7 @@ public class Mouse extends Thread implements IMouse{
             while ((incomingMessage = reader.readLine()) != null) {
                 MessageCreator messageCreator = new MessageCreator(incomingMessage, MessageTypes.TCP);
                 this.loggerEx.info("Mouse received TCP message", messageCreator.jsonfyMessage());
-                this.processTCPMessage((TCPMessage) messageCreator.getMessage());
+                this.processMessage((TCPMessage) messageCreator.getMessage());
                 this.isConnected = true;
             }
             if (this.isInterrupted()) {
@@ -156,10 +156,6 @@ public class Mouse extends Thread implements IMouse{
             this.connectionStatus = EConnectionStatus.FAIL;
             this.loggerEx.info("Mouse disconnecting");
         }
-    }
-
-    private void processTCPMessage(TCPMessage tcpMessage) {
-        this.processMessage(tcpMessage);
     }
 
     private void sendInitializationTCPMessage() throws IOException {
@@ -196,10 +192,30 @@ public class Mouse extends Thread implements IMouse{
                 case NAME_CHANGE:
                     this.changeName(tcpMessage);
                     break;
+                case KEYBOARD_SHOW:
+                    this.setKeyboard();
+                    break;
+                case KEYBOARD_HIDE:
+                    this.clearKeyboard();
+                    break;
                 default:
                     this.sendTCPMessage(tcpMessage);
                     break;
             }
+    }
+
+    private void clearKeyboard() {
+        this.keyboard.interrupt();
+        this.keyboard = null;
+        this.keyboardMessageBuffer = null;
+
+    }
+
+    private void setKeyboard() {
+        System.out.println("KEYghhffgddggdfgdd");
+        this.keyboardMessageBuffer = new KeyboardMessageBuffer();
+        this.keyboard = new Keyboard(this.keyboardMessageBuffer);
+        this.keyboard.start();
     }
 
     private void changeName(TCPMessage tcpMessage) {

@@ -1,13 +1,12 @@
 package ajprogramming.TouchMouse.Keyboard;
 
-import ajprogramming.TouchMouse.AppConfig;
+import ajprogramming.TouchMouse.Keyboard.KeyArrays.*;
 import ajprogramming.TouchMouse.Network.KeyboardMessageBuffer;
-import ajprogramming.TouchMouse.Network.MessageBuffer;
 import ajprogramming.TouchMouse.Network.Messages.KeyboardKey;
 import ajprogramming.TouchMouse.Network.Messages.UDPMessage;
-import ajprogramming.TouchMouse.Utils.EPlatform;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class Keyboard extends Thread{
 
@@ -31,11 +30,19 @@ public class Keyboard extends Thread{
     @Override
     public void run() {
         while (this.running) {
-            if (!this.messageBuffer.isEmpty()) {
-                this.clickKey(this.messageBuffer.getMessage());
+            System.out.println("XXXXXIIIIOOOOOOOOO");
+
+            UDPMessage udpMessage = this.messageBuffer.getMessage();
+
+            if (udpMessage != null) {
+                System.out.println("XXXXXIIIIOOOOOOOOO");
+                this.clickKey(udpMessage);
             } else  {
                 try {
-                    this.wait();
+                    synchronized (this) {
+                        this.wait();
+
+                    }
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -44,6 +51,50 @@ public class Keyboard extends Thread{
     }
 
     private void clickKey(UDPMessage udpMessage) {
-        this.robot.keyPress(((KeyboardKey) udpMessage.getAction()).getKeyCode());
+        String charKey = ((KeyboardKey) udpMessage.getAction()).getKeyCode();
+        int  keyEvent = -1;
+        keyEvent = LowCasedLettersVKCodes.getVKCode(charKey);
+        System.out.println("KEY EVENT INSIDA CLIECK KEY " );
+        if (keyEvent > -1) {
+            this.robot.keyPress(keyEvent);
+            this.robot.keyRelease(keyEvent);
+            return;
+        }
+
+        keyEvent = CapitalLettersVKCodes.getVKCode(charKey);
+        if (keyEvent > -1) {
+            this.robot.keyPress(KeyEvent.VK_SHIFT);
+            this.robot.keyPress(keyEvent);
+            this.robot.keyRelease(keyEvent);
+            this.robot.keyRelease(KeyEvent.VK_SHIFT);
+            return;
+        }
+
+        keyEvent = CombinedChars.getVKCode(charKey);
+        if (keyEvent > -1){
+            this.robot.keyPress(KeyEvent.VK_SHIFT);
+            this.robot.keyPress(keyEvent);
+            this.robot.keyRelease(keyEvent);
+            this.robot.keyRelease(KeyEvent.VK_SHIFT);
+            return;
+        }
+        keyEvent = DiactricChars.getVKCode(charKey);
+
+        if (keyEvent > -1) {
+            this.robot.keyPress(KeyEvent.VK_ALT_GRAPH);
+            this.robot.keyPress(keyEvent);
+            this.robot.keyRelease(keyEvent);
+            this.robot.keyRelease(KeyEvent.VK_ALT_GRAPH);
+            return;
+        }
+
+        keyEvent = SpecialCharsToVkCodes.getVKCode(charKey);
+        if (keyEvent > -1) {
+            this.robot.keyPress(keyEvent);
+            this.robot.keyRelease(keyEvent);
+        }
+
     }
+
+
 }

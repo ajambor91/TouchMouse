@@ -46,7 +46,6 @@ public class TCPClient extends Thread {
                 }
 
                 Log.d("TCP", "Connected to host");
-//                this.initConnection();
                 this.listenForMessage(this.socket);
             } catch (SocketException socketException) {
                 if (this.networkService.getConnectionStatus() != EConnectionStatus.DISCONNECTED) {

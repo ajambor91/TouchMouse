@@ -14,6 +14,7 @@ import aj.phone.client.NetworkModule.Enums.EMouseTouchType;
 import aj.phone.client.NetworkModule.Enums.TCPMessageTypeEnum;
 import aj.phone.client.NetworkModule.Enums.UDPMessageTypeEnum;
 import aj.phone.client.NetworkModule.Message.BroadcastMessage;
+import aj.phone.client.NetworkModule.Message.KeyboardKey;
 import aj.phone.client.NetworkModule.Message.MessageCreator;
 import aj.phone.client.NetworkModule.Message.Move;
 import aj.phone.client.NetworkModule.Message.Scroll;
@@ -92,6 +93,17 @@ public class NetworkService extends MouseInet {
         touch.setClickType(mouseTouchType);
         touch.setClick(mouseTouch);
         MessageCreator messageCreator = this.createMessageCreator(UDPMessageTypeEnum.TOUCH, touch);
+        synchronized (this.udpClient) {
+            this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
+            this.udpClient.notify();
+        }
+    }
+
+    public void setKeyUDPMessage(String keyCode) {
+        KeyboardKey keyboardKey = new KeyboardKey();
+        keyboardKey.setKeyCode(keyCode);
+        MessageCreator messageCreator = this.createMessageCreator(UDPMessageTypeEnum.KEYBOARD, keyboardKey);
+        Log.d("Keyboard", messageCreator.jsonfyMessage());
         synchronized (this.udpClient) {
             this.udpClient.setMessage((UDPMessage) messageCreator.getMessage());
             this.udpClient.notify();
@@ -200,6 +212,14 @@ public class NetworkService extends MouseInet {
     public void processNewConnection() {
         this.setConnectionStatus(EConnectionStatus.CONNECTED);
         this.processConnection();
+    }
+
+    public void setTCPMessage(TCPMessageTypeEnum typeEnum) {
+        MessageCreator messageCreator = this.createMessageCreator(typeEnum);
+        this.tcpMessageBuffer.addMessage((TCPMessage) messageCreator.getMessage());
+        synchronized (this.tcpClient.getTcpSender()) {
+            this.tcpClient.getTcpSender().notify();
+        }
     }
 
     private void conditionallyRunConnectionActivity() {

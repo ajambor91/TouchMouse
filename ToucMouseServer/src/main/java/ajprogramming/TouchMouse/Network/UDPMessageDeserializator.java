@@ -46,6 +46,9 @@ public class UDPMessageDeserializator extends JsonDeserializer<INetworkMessage> 
             case SCROLL:
                 udpAction = objectActionNode.readValueAs(Scroll.class);
                 break;
+            case KEYBOARD:
+                udpAction = objectActionNode.readValueAs(KeyboardKey.class);
+                break;
             default:
                 throw new IOException("Invalid UDPAction type: " + type);
         }

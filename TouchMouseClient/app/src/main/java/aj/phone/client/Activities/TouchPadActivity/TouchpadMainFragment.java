@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
@@ -48,7 +50,6 @@ public class TouchpadMainFragment extends Fragment {
         this.mouseMove.setNetworkModule(this.networkService);
         Log.d("TOUCHPAD", "Initialized touchpad fragment");
         View view = inflater.inflate(R.layout.touchpad_fragment_main, container, false);
-        this.addTouchEvent(view);
         return view.getRootView();
     }
 
@@ -56,17 +57,30 @@ public class TouchpadMainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        NetworkService networkServiceL = this.networkService;
-        MouseMove move = this.mouseMove;
+        this.addTouchEvent(view);
+
         Log.d("TOUCHPAD", "Adding event into screen");
 
     }
 
+    private void showKeyboard() {
+        Log.d("KEYBOARD", "Activity listener");
+
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        KeyboardInputFragment keyboardInputFragment = new KeyboardInputFragment();
+        FragmentTransaction fr = fragmentManager.beginTransaction();
+        fr.add(R.id.fragmentContainerView, keyboardInputFragment).commit();
+    }
+
     private void addTouchEvent(View view) {
+        mouseMove.setActionListener(v -> {
+            this.showKeyboard();
+        });
+
         view.setOnTouchListener(new View.OnTouchListener() {
 
             public boolean onTouch(View v, MotionEvent event) {
-                return mouseMove.runMouse(event);
+                return mouseMove.runMouse(v, event);
             }
         });
 
@@ -75,6 +89,7 @@ public class TouchpadMainFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.d("KEYBOARD", "Destroy view");
         binding = null;
     }
 

@@ -11,8 +11,8 @@ import aj.phone.client.NetworkModule.Message.MessageCreator;
 
 public class TCPSender extends Thread {
     private final Socket socket;
-    private boolean running;
     private final TCPMessageBuffer tcpMessageBuffer;
+    private boolean running;
 
     public TCPSender(Socket socket, TCPMessageBuffer tcpMessageBuffer) {
         this.running = true;

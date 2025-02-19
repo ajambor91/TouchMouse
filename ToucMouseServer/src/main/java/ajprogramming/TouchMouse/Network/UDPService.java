@@ -51,6 +51,7 @@ public class UDPService extends Thread {
                 if (!this.isOwnInterface(address, interfaces)) {
                     ActionCreator actionCreator = new ActionCreator(receivedPacket.getData(), length);
                     List<UDPMessage> message = actionCreator.getAction();
+                    System.out.println("XXWWWWWWWAAAAAAXX ");
                     if (message != null) {
                         this.mouseHandler.onAction(actionCreator.getAction());
                     }

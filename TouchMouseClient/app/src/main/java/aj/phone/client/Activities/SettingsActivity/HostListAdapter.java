@@ -79,7 +79,6 @@ public class HostListAdapter extends RecyclerView.Adapter<HostListAdapter.ViewHo
             Log.d("Settings", "Creating view holder");
             textView = itemView.findViewById(R.id.hostIp);
             radioButton = itemView.findViewById(R.id.radioButton);
-//            button = itemView.findViewById(R.id.removeHost);
         }
     }
 }
