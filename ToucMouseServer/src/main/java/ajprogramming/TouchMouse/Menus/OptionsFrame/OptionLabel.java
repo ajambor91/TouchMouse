@@ -8,6 +8,7 @@ import java.awt.*;
 public class OptionLabel extends JLabel {
     private final OptionLabelOptions optionLabelOptions;
     private final MainOptionsPane optionsPane;
+
     public OptionLabel(String text, MainOptionsPane optionsPane) {
         super(text);
         this.optionLabelOptions = new OptionLabelOptions();

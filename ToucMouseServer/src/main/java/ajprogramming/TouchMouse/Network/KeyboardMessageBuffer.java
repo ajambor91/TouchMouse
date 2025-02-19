@@ -20,10 +20,10 @@ public class KeyboardMessageBuffer {
     public UDPMessage getMessage() {
         return this.buffer.poll();
     }
-    
+
     public synchronized void put(UDPMessage message) {
 
-            this.buffer.add(message);
+        this.buffer.add(message);
 
 
     }

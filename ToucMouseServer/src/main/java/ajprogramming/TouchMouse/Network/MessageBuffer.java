@@ -23,7 +23,7 @@ public class MessageBuffer {
 
     public synchronized void put(UDPMessage message) {
 
-            this.buffer.add(message);
+        this.buffer.add(message);
 
 
     }

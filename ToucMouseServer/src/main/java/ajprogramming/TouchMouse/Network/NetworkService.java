@@ -10,13 +10,14 @@ import java.net.UnknownHostException;
 import java.util.UUID;
 
 public class NetworkService extends Host {
-    private ENetworkStatus networkStatus;
     private static NetworkService instance;
     private final MouseHandler mouseHandler;
+    private ENetworkStatus networkStatus;
     private UDPService udpService;
     private TCPService tcpService;
     private Broadcast broadcast;
-    private LoggerEx loggerEx;
+    private final LoggerEx loggerEx;
+
     private NetworkService() {
         this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
         this.initializeHost();
@@ -80,6 +81,7 @@ public class NetworkService extends Host {
 
         }
     }
+
     public ENetworkStatus status() {
         return this.networkStatus;
     }

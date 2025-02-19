@@ -7,6 +7,8 @@ public enum EKeyCharType {
 
     private final String charType;
 
-    EKeyCharType(String type) {this.charType = type;}
+    EKeyCharType(String type) {
+        this.charType = type;
+    }
 
 }

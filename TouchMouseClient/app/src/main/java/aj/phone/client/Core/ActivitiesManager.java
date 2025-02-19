@@ -57,7 +57,6 @@ public class ActivitiesManager {
         }
     }
 
-
     public void runScreen(int containerViewId, Class<? extends Fragment> fragmentClass) {
         this.currentActivity.changeScreen(containerViewId, fragmentClass);
     }

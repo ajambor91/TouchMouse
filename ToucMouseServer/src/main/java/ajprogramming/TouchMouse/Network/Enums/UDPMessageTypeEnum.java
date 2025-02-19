@@ -13,5 +13,7 @@ public enum UDPMessageTypeEnum {
         this.messageType = messageType;
     }
 
-    public String getMessageType() { return this.messageType; }
+    public String getMessageType() {
+        return this.messageType;
+    }
 }

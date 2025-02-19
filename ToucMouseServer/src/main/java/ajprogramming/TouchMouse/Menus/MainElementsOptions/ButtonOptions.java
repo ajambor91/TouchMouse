@@ -6,13 +6,14 @@ import java.awt.*;
 
 public class ButtonOptions implements IElementOptions {
 
-    private int height = 30;
-    private int width = 150;
-    private Color backgroundColor = new Color(64, 64, 64);
+    private final int height = 30;
+    private final int width = 150;
+    private final Color backgroundColor = new Color(64, 64, 64);
 
     public Color getBackgroundColor() {
         return this.backgroundColor;
     }
+
     public int getWidth() {
         return this.width;
     }

@@ -9,5 +9,7 @@ public enum BroadcastMessageTypeEnum {
         this.messageType = messageType;
     }
 
-    public String getMessageType() { return this.messageType; }
+    public String getMessageType() {
+        return this.messageType;
+    }
 }

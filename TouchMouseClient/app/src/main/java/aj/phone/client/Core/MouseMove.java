@@ -157,6 +157,10 @@ public class MouseMove {
 
     }
 
+    public interface GetTextData {
+        void textState();
+    }
+
     public interface KeyboardActionListener {
         void onKeyboardRequest(View view);
     }

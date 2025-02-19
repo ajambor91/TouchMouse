@@ -110,7 +110,7 @@ public class SettingsFragment extends Fragment {
         this.mouseName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) { // Obsługa "Enter"
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     String newName = mouseName.getText().toString();
                     networkService.changeName(newName);
                     return true;

@@ -9,7 +9,9 @@ public enum EFunctionalKey {
     SHFT("shft");
     private final String key;
 
-    EFunctionalKey(String key) {this.key = key;}
+    EFunctionalKey(String key) {
+        this.key = key;
+    }
 
 
 }

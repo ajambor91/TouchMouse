@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">TouchMouse</string>
     <string name="reconnect">Reconnect</string>
-
     <string name="connected">Connected</string>
     <string name="quick_tap">Quick tap to press mouse button</string>
     <string name="scroll">Scroll using two fingers</string>
@@ -20,7 +19,8 @@
     <string name="remove_host">Remove host</string>
     <string name="back">Back</string>
     <string name="host_manager">Host Manager</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="to_enter_text_swipe_up_from_the_bottom_edge_of_the_screen_to_reveal_the_keyboard_you_can_then_begin_typing">To enter text, swipe up from the bottom edge of the screen to reveal the keyboard. You can then begin typing. To close keyboard simply touch back button.</string>
+    <string name="keyboard">Keyboard</string>
 
 </resources>

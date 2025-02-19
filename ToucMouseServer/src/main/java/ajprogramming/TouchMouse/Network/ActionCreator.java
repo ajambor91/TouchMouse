@@ -27,13 +27,14 @@ public class ActionCreator {
     }
 
     private void initializeActionByte(byte[] message, int length) {
-        String messageFromBytes = new String(message, 0, length, StandardCharsets.UTF_8 );
+        String messageFromBytes = new String(message, 0, length, StandardCharsets.UTF_8);
         this.initializeAction(messageFromBytes);
     }
 
-    private void initializeAction(String message)  {
+    private void initializeAction(String message) {
         try {
-            this.message = (List<UDPMessage>) this.objectMapper.readValue(message, new TypeReference<List<UDPMessage>>() {});
+            this.message = this.objectMapper.readValue(message, new TypeReference<List<UDPMessage>>() {
+            });
         } catch (JsonProcessingException e) {
             this.loggerEx.warning("Action creator, JSON Error", e.getMessage());
         }

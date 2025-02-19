@@ -7,8 +7,7 @@ ___
 
 - **Wireless Control: Connect via Wi-Fi.**
 - **Multi-Touch Support: Pinch, scroll, swipe, and tap with ease.**
-- **Customizable Gestures: Configure your gestures to suit your workflow.**
-- **Low Latency: Smooth and responsive interaction with minimal lag.**
+- **Open and free! No adwords and paywalls. All the features always will be free.**
 
 ## Tech stack
 - **Desktop App**
@@ -41,12 +40,16 @@ However if you using Windows, you can run compiled desktop .exe app from apps di
 
 ![Connecting](screens/mobile/connecting_scaled.jpg)
 
+### Using
 On start application will start connecting process, you have to wait for host connection
 
 ![Touchpad](screens/mobile/touchpad_scaled.jpg)
 
 Here is the touchpad activity. Quick tap on this screen will be mouse button down and next mouse button up event on pc. Two fingers scrolling will scroll your active window on PC. For contect menu please hold one finger and quick tap second.
 
+![Keyboard](screens/mobile/keyboard_scaled.jpg);
+
+When you swipe from the bottom edge, the keyboard will appear, and you can type letters as you would on a computer keyboard. In the top field, you will see the text you've typed. However, note that if you type something on a physical keyboard connected to the computer, the text field at the top will not display the correct text; it will only show the phrases you typed on your mobile device. To close typing mode, hide keyboard and next push back button on the device.
 ### Settings
 
 ![Settings](screens/mobile/settings_scaled.jpg)
@@ -61,6 +64,8 @@ You can disconnect a connected host or remove any PC. The removal action will al
 
 In the desktop application you can remove and disconnect phone touchpad. Also you can go to the information screen and see broadcast interfaces, your hostname, ip and app version.
 
+All screenshots are from a physical device
+
 ## Realease
 You can now download the built applications. The app-based code is in the release branch.  Windows and Android apps v0.1.0 are currently available.
 https://ftp.adamantum.site/TouchMouse/
@@ -71,26 +76,17 @@ Note: On Android, you have to enable the "Install from unknown sources" option. 
 
 Here are the planned improvements and features for TouchMouse:
 
-1. **Keyboard**:
-    -  Show keyboard when the application detects that the user has clicked on an input field (text field) on the desktop. This will allow the user to easily type text directly from their mobile device.
-
-2. **Media buttons**:
+1**Media buttons**:
     - Add media control buttons for pause, stop, and next track to control any currently playing media.
 
-3. **Default and current active mouse**:
+2. **Default and current active mouse**:
     - Allow users to select currently active and default mice in desktop application
-
-4. **Default and current active host**:
-    - Allow users to select currently active and default host in mobile application
-
-5. **Mouse options**:
+3. **Mouse options**:
     - Advanced settings like mouse sensitivity
 
 6. **Linux application**:
     - Build .rpm and .deb desktop app for Linux
-7. **Compile mobile app**
-    - Compilse mobile app to .adk and deploy it to Google Play store
-
+7. **Deploy mobile app into Google Play**
 
 ## Contributing ##
 Feel free to open issues or submit pull requests. All contributions are welcome!

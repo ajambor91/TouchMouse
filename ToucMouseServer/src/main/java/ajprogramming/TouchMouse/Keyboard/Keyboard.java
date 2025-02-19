@@ -8,11 +8,12 @@ import ajprogramming.TouchMouse.Network.Messages.UDPMessage;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class Keyboard extends Thread{
+public class Keyboard extends Thread {
 
-    private volatile boolean running = true;
-    private Robot robot;
     private final KeyboardMessageBuffer messageBuffer;
+    private final boolean running = true;
+    private Robot robot;
+
     public Keyboard(KeyboardMessageBuffer messageBuffer) {
         this.messageBuffer = messageBuffer;
         this.init();
@@ -30,14 +31,11 @@ public class Keyboard extends Thread{
     @Override
     public void run() {
         while (this.running) {
-            System.out.println("XXXXXIIIIOOOOOOOOO");
-
             UDPMessage udpMessage = this.messageBuffer.getMessage();
 
             if (udpMessage != null) {
-                System.out.println("XXXXXIIIIOOOOOOOOO");
                 this.clickKey(udpMessage);
-            } else  {
+            } else {
                 try {
                     synchronized (this) {
                         this.wait();
@@ -52,9 +50,8 @@ public class Keyboard extends Thread{
 
     private void clickKey(UDPMessage udpMessage) {
         String charKey = ((KeyboardKey) udpMessage.getAction()).getKeyCode();
-        int  keyEvent = -1;
+        int keyEvent = -1;
         keyEvent = LowCasedLettersVKCodes.getVKCode(charKey);
-        System.out.println("KEY EVENT INSIDA CLIECK KEY " );
         if (keyEvent > -1) {
             this.robot.keyPress(keyEvent);
             this.robot.keyRelease(keyEvent);
@@ -71,7 +68,7 @@ public class Keyboard extends Thread{
         }
 
         keyEvent = CombinedChars.getVKCode(charKey);
-        if (keyEvent > -1){
+        if (keyEvent > -1) {
             this.robot.keyPress(KeyEvent.VK_SHIFT);
             this.robot.keyPress(keyEvent);
             this.robot.keyRelease(keyEvent);

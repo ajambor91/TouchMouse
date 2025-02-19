@@ -8,6 +8,7 @@ import java.awt.*;
 public class MouseListLabel extends JLabel {
     private final MouseListLabelOptions mouseListLabelOptions;
     private final MouseListPane mouseListPane;
+
     public MouseListLabel(MouseListPane mouseListPane) {
         super("Connected mice");
         this.mouseListLabelOptions = new MouseListLabelOptions();

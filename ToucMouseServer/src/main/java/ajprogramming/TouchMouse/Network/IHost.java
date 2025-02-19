@@ -2,19 +2,20 @@ package ajprogramming.TouchMouse.Network;
 
 public interface IHost {
 
-    public void setHostAddress(String hostAddress);
+    String getHostAddress();
 
-    public String getHostAddress();
+    void setHostAddress(String hostAddress);
 
-    public void setHostname(String hostname);
+    String getHostname();
 
-    public String getHostname();
+    void setHostname(String hostname);
 
-    public void setSessionId(String sessionId);
-    public String getSessionId();
+    String getSessionId();
 
-    public String getAppName();
+    void setSessionId(String sessionId);
 
-    public void setAppName(String appName);
+    String getAppName();
+
+    void setAppName(String appName);
 
 }

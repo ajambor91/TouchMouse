@@ -1,4 +1,4 @@
-package aj.phone.client.NetworkModule.Message;
+package aj.phone.client.NetworkModule.Enums;
 
 public enum EFunctionalKey {
 

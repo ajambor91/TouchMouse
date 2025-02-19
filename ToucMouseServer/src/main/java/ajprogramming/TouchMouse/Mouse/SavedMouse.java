@@ -2,7 +2,7 @@ package ajprogramming.TouchMouse.Mouse;
 
 import ajprogramming.TouchMouse.Tray.Tray;
 
-public class SavedMouse implements IMouse{
+public class SavedMouse implements IMouse {
 
     private String mouseId;
     private String mouseName;
@@ -21,6 +21,7 @@ public class SavedMouse implements IMouse{
         this.mouseAddress = mouseAddress;
         this.isDefault = isDefault;
     }
+
     public String getMouseName() {
         return this.mouseName;
     }
@@ -29,12 +30,12 @@ public class SavedMouse implements IMouse{
         this.mouseName = mouseName;
     }
 
-    public void setMouseAddress(String mouseAddress) {
-        this.mouseAddress = mouseAddress;
-    }
-
     public String getMouseAddress() {
         return this.mouseAddress;
+    }
+
+    public void setMouseAddress(String mouseAddress) {
+        this.mouseAddress = mouseAddress;
     }
 
     public String getMouseID() {
@@ -44,9 +45,11 @@ public class SavedMouse implements IMouse{
     public void setMouseId(String mouseId) {
         this.mouseId = mouseId;
     }
+
     public void removeMouse() {
         Tray.getInstance().showMessage("Mouse removed", String.format("Mouse %s removed", this.mouseName));
     }
+
     @Override
     public String toString() {
         return String.format("%s, address: %s, status: Unknown", this.getMouseName(), this.getMouseAddress());

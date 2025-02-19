@@ -16,6 +16,7 @@ public class MouseListPane extends DefaultPane {
     private MouseList mouseList;
     private ButtonsSettingsPane buttonsSettingsPane;
     private JLabel jLabel;
+
     public MouseListPane(MainFrame mainFrame, HashMap<String, IMouse> miceHashMap) {
         this.mouseListPaneOptions = new MouseListPaneOptions();
         this.mainFrame = mainFrame;
@@ -51,17 +52,17 @@ public class MouseListPane extends DefaultPane {
     }
 
 
-
     public MouseList getMouseList() {
         return this.mouseList;
     }
 
     public void onDisconnectEvent() {
-        this.mainFrame.onDisconnect( (IMouse) this.mouseList.getSelectedValue());
+        this.mainFrame.onDisconnect((IMouse) this.mouseList.getSelectedValue());
     }
-    public void onRemoveEvent() {
-        this.mainFrame.onRemove((IMouse) this.mouseList.getSelectedValue());}
 
+    public void onRemoveEvent() {
+        this.mainFrame.onRemove((IMouse) this.mouseList.getSelectedValue());
+    }
 
 
 }

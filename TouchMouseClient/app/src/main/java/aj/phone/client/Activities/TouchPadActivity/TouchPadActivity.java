@@ -2,7 +2,6 @@ package aj.phone.client.Activities.TouchPadActivity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -23,10 +22,7 @@ public class TouchPadActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TOUCHPAD", "Touchpad acitivity initialization");
         binding = ActivityTouchpadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Log.d("TOUCHPAD", "Initialized touchpad activity");
     }
-
 }

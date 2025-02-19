@@ -25,8 +25,12 @@ import java.util.UUID;
 
 
 public class XMLUtils {
-    private final static String appName = "TouchMouse";
     public final static String defaultMouseName = "MouseTouch";
+    public final static String defaultOptionAttr = "value";
+    public final static String mouseNameTag = "name";
+    public final static String uniqueTag = "app-id";
+    public final static String appNameTag = "app-name";
+    private final static String appName = "TouchMouse";
     private final static String configDirName = "config";
     private final static String configFileName = "/app_data.xml";
     private final static String mouseAddressTagName = "mouseAddress";
@@ -34,59 +38,47 @@ public class XMLUtils {
     private final static String mouseNameTagName = "mouseName";
     private final static String mouseIdTagName = "mouseId";
     private final static String mouseTagName = "mouse";
-    public final static String defaultOptionAttr = "value";
-    public final static String mouseNameTag = "name";
     private final static String rootTag = "root";
     private final static String hostTagName = "host";
     private final static String miceTagName = "mice";
-
-    public final static String uniqueTag = "app-id";
-
-    public final static String appNameTag = "app-name";
-
-
     private final static DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
 
 
     public static boolean isDocumentExists() {
-        return Files.exists(Path.of( AppConfig.getInstance().getAppDataPath() + configFileName));
+        return Files.exists(Path.of(AppConfig.getInstance().getAppDataPath() + configFileName));
     }
 
     public static void createFile() throws IOException, ParserConfigurationException, TransformerException {
 
 
-            Files.createFile(Path.of( AppConfig.getInstance().getAppDataPath() + configFileName));
+        Files.createFile(Path.of(AppConfig.getInstance().getAppDataPath() + configFileName));
 
     }
 
 
-
     public static boolean createDocument() throws ParserConfigurationException, TransformerException {
-            DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
-            Document document = documentBuilder.newDocument();
-            Element root = XMLUtils.createElement(document, XMLUtils.rootTag, XMLUtils.rootTag);
+        DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+        Document document = documentBuilder.newDocument();
+        Element root = XMLUtils.createElement(document, XMLUtils.rootTag, XMLUtils.rootTag);
 
-            Element host = XMLUtils.createElement(document, XMLUtils.hostTagName, XMLUtils.hostTagName);
-            root.appendChild(host);
-            document.appendChild(root);
-            XMLUtils.saveFile(document);
-            return true;
+        Element host = XMLUtils.createElement(document, XMLUtils.hostTagName, XMLUtils.hostTagName);
+        root.appendChild(host);
+        document.appendChild(root);
+        XMLUtils.saveFile(document);
+        return true;
 
     }
 
     public static boolean checkIsDocumentIsEmpty() throws IOException, SAXException, ParserConfigurationException {
-            Document document = XMLUtils.initializeDocument();
+        Document document = XMLUtils.initializeDocument();
 
 
-            Node config = document.getElementsByTagName(XMLUtils.rootTag).item(0);
-            if (config == null) {
-                return true;
-            }
-            NodeList nodeList = config.getChildNodes();
-            if (nodeList.getLength() > 0) {
-                return false;
-            }
+        Node config = document.getElementsByTagName(XMLUtils.rootTag).item(0);
+        if (config == null) {
             return true;
+        }
+        NodeList nodeList = config.getChildNodes();
+        return nodeList.getLength() <= 0;
 
     }
 
@@ -115,10 +107,10 @@ public class XMLUtils {
 
         Document document = XMLUtils.initializeDocument();
         Element rootElement = (Element) document.getElementsByTagName(XMLUtils.rootTag).item(0);
-        NodeList nodes =  document.getElementsByTagName(XMLUtils.miceTagName);
+        NodeList nodes = document.getElementsByTagName(XMLUtils.miceTagName);
         Node node = null;
         if (nodes != null) {
-            node  = nodes.item(0);
+            node = nodes.item(0);
         }
 
         NodeList miceList = null;
@@ -132,17 +124,17 @@ public class XMLUtils {
         }
 
         for (int i = 0; i < miceList.getLength(); i++) {
-             node = miceList.item(i);
+            node = miceList.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
                 String mouseId = element.getAttribute(XMLUtils.mouseIdTagName);
                 String mouseAddress = element.getAttribute(XMLUtils.mouseAddressTagName);
-                String mouseName  = element.getAttributeNode(XMLUtils.mouseNameTagName).getValue();
+                String mouseName = element.getAttributeNode(XMLUtils.mouseNameTagName).getValue();
                 String defaultMouse = element.getAttributeNode(XMLUtils.mouseDefaultTagName).getValue();
 
 
                 boolean isDefault = defaultMouse.equals("true");
-                IMouse mouse = new SavedMouse(mouseId,mouseName, mouseAddress, isDefault);
+                IMouse mouse = new SavedMouse(mouseId, mouseName, mouseAddress, isDefault);
                 miceHashMap.put(mouse.getMouseID(), mouse);
             }
         }
@@ -152,7 +144,7 @@ public class XMLUtils {
     public static void removeMouse(IMouse mouseToRemove) throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Document document = XMLUtils.initializeDocument();
         NodeList mice = document.getElementsByTagName(XMLUtils.miceTagName).item(0).getChildNodes();
-        for (int i = 0;  i < mice.getLength(); i++) {
+        for (int i = 0; i < mice.getLength(); i++) {
             Element mouseEl = (Element) mice.item(i);
             String mouseId = mouseEl.getAttribute(XMLUtils.mouseIdTagName);
 
@@ -167,7 +159,7 @@ public class XMLUtils {
     public static void changeMouseName(IMouse mouseToChange) throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Document document = XMLUtils.initializeDocument();
         NodeList mice = document.getElementsByTagName(XMLUtils.miceTagName).item(0).getChildNodes();
-        for (int i = 0;  i < mice.getLength(); i++) {
+        for (int i = 0; i < mice.getLength(); i++) {
             Element mouseEl = (Element) mice.item(i);
             String mouseId = mouseEl.getAttribute(XMLUtils.mouseIdTagName);
 
@@ -191,7 +183,7 @@ public class XMLUtils {
         }
         Element mouseElement = document.createElement(XMLUtils.mouseTagName);
         Attr defaultAttr = document.createAttribute(XMLUtils.mouseDefaultTagName);
-        if (rootElement.getChildNodes().getLength() == 0){
+        if (rootElement.getChildNodes().getLength() == 0) {
             defaultAttr.setValue("true");
         } else {
             defaultAttr.setValue("false");
@@ -250,7 +242,7 @@ public class XMLUtils {
             config.appendChild(nameElement);
         }
         Element uniqueIdEl = (Element) document.getElementsByTagName(XMLUtils.uniqueTag).item(0);
-        if (uniqueIdEl == null || uniqueIdEl.getAttribute(XMLUtils.defaultOptionAttr) == null ) {
+        if (uniqueIdEl == null || uniqueIdEl.getAttribute(XMLUtils.defaultOptionAttr) == null) {
             uniqueIdEl = document.createElement(XMLUtils.uniqueTag);
             Attr attr = document.createAttribute("id");
             attr.setValue(XMLUtils.uniqueTag);
@@ -263,7 +255,7 @@ public class XMLUtils {
         }
 
         Element appNameEl = (Element) document.getElementsByTagName(XMLUtils.appNameTag).item(0);
-        if (appNameEl == null || appNameEl.getAttribute(XMLUtils.defaultOptionAttr) == null ) {
+        if (appNameEl == null || appNameEl.getAttribute(XMLUtils.defaultOptionAttr) == null) {
             appNameEl = document.createElement(XMLUtils.appNameTag);
             Attr attr = document.createAttribute("id");
             attr.setValue(XMLUtils.appNameTag);

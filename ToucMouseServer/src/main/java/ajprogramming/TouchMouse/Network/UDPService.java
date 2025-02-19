@@ -1,31 +1,26 @@
-
 package ajprogramming.TouchMouse.Network;
 
-import ajprogramming.TouchMouse.Mouse.Mouse;
 import ajprogramming.TouchMouse.Mouse.MouseHandler;
 import ajprogramming.TouchMouse.Network.Messages.UDPMessage;
 import ajprogramming.TouchMouse.Network.Utils.NetworkUtils;
 import ajprogramming.TouchMouse.Utils.LoggerEx;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
  * @author Adam
  */
 public class UDPService extends Thread {
-    private volatile boolean run = true;
     private final MouseHandler mouseHandler;
     private final LoggerEx loggerEx;
+    private volatile boolean run = true;
     private DatagramSocket datagramSocket;
+
     public UDPService(MouseHandler mouseHandler) {
         this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
         this.mouseHandler = mouseHandler;
@@ -39,7 +34,7 @@ public class UDPService extends Thread {
 
         try {
             final ArrayList<InetAddress> interfaces = NetworkUtils.listAllOwnAddresses();
-            this.datagramSocket= new DatagramSocket(UDPServerConfig.getInstance().PORT);
+            this.datagramSocket = new DatagramSocket(UDPServerConfig.getInstance().PORT);
             DatagramPacket receivedPacket
                     = new DatagramPacket(new byte[UDPServerConfig.getInstance().BUFFER_SIZE], 1024);
             while (this.run) {
@@ -51,7 +46,6 @@ public class UDPService extends Thread {
                 if (!this.isOwnInterface(address, interfaces)) {
                     ActionCreator actionCreator = new ActionCreator(receivedPacket.getData(), length);
                     List<UDPMessage> message = actionCreator.getAction();
-                    System.out.println("XXWWWWWWWAAAAAAXX ");
                     if (message != null) {
                         this.mouseHandler.onAction(actionCreator.getAction());
                     }
@@ -83,5 +77,5 @@ public class UDPService extends Thread {
     private boolean isOwnInterface(InetAddress address, ArrayList<InetAddress> inetAddressArrayList) {
         return inetAddressArrayList.stream().anyMatch(addr -> addr.getHostAddress().equals(address.getHostAddress()));
     }
-    
+
 }

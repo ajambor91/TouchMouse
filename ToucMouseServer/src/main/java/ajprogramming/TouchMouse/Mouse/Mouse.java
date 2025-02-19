@@ -18,21 +18,21 @@ import ajprogramming.TouchMouse.Utils.XML;
 import java.io.*;
 import java.net.Socket;
 
-public class Mouse extends Thread implements IMouse{
+public class Mouse extends Thread implements IMouse {
 
-    private Keyboard keyboard;
     private final MouseHandler mouseHandler;
     private final IHost host;
+    private final LoggerEx loggerEx;
+    private Keyboard keyboard;
     private boolean isConnected = false;
     private MouseMove mouseMove;
-    private  String mouseAddress;
-    private  String sessionId;
-    private final LoggerEx loggerEx;
-    private  Socket tcpSocket;
+    private String mouseAddress;
+    private final String sessionId;
+    private Socket tcpSocket;
     private String mouseName;
-    private  String mouseId;
+    private String mouseId;
     private EConnectionStatus connectionStatus;
-    private MessageBuffer messageBuffer;
+    private final MessageBuffer messageBuffer;
     private KeyboardMessageBuffer keyboardMessageBuffer;
 
     public Mouse(Socket tcpSocket, MouseHandler mouseHandler, TCPMessage tcpMessage, IHost host) {
@@ -70,9 +70,14 @@ public class Mouse extends Thread implements IMouse{
         return this.mouseId;
     }
 
+    public void setMouseId(String mouseId) {
+        this.mouseId = mouseId;
+    }
+
     public IHost getHost() {
         return this.host;
     }
+
     public String getMouseName() {
         return this.mouseName;
     }
@@ -81,25 +86,20 @@ public class Mouse extends Thread implements IMouse{
         this.mouseName = mouseName;
     }
 
-    public void setMouseAddress(String mouseAddress) {
-        this.mouseAddress = mouseAddress;
-    }
-
     public String getMouseAddress() {
         return this.mouseAddress;
+    }
+
+    public void setMouseAddress(String mouseAddress) {
+        this.mouseAddress = mouseAddress;
     }
 
     public String getMouseID() {
         return this.mouseId;
     }
 
-    public void setMouseId(String mouseId) {
-        this.mouseId = mouseId;
-    }
-
     public void addMsg(UDPMessage udpMessage) {
         if (udpMessage.getType() == UDPMessageTypeEnum.KEYBOARD) {
-            System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRR");
 
             this.keyboardMessageBuffer.put(udpMessage);
             synchronized (this.keyboard) {
@@ -107,7 +107,6 @@ public class Mouse extends Thread implements IMouse{
             }
         } else {
             this.messageBuffer.put(udpMessage);
-            System.out.printf("XXXX %s", udpMessage.getType().getMessageType());
             synchronized (this.mouseMove) {
                 this.mouseMove.notify();
             }
@@ -136,7 +135,7 @@ public class Mouse extends Thread implements IMouse{
     }
 
     private void listeningTCP() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(this.tcpSocket.getInputStream()));) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(this.tcpSocket.getInputStream()))) {
             this.tcpSocket.setKeepAlive(true);
             String incomingMessage;
             this.isConnected = true;
@@ -151,7 +150,7 @@ public class Mouse extends Thread implements IMouse{
             }
             this.connectionStatus = EConnectionStatus.FAIL;
             this.isConnected = false;
-                this.interrupt();
+            this.interrupt();
         } catch (IOException | IllegalMonitorStateException | InterruptedException e) {
             this.connectionStatus = EConnectionStatus.FAIL;
             this.loggerEx.info("Mouse disconnecting");
@@ -185,23 +184,23 @@ public class Mouse extends Thread implements IMouse{
     }
 
     private void processMessage(TCPMessage tcpMessage) {
-            switch (tcpMessage.getType()) {
-                case DISCONNECT:
-                    this.disconnectMouse();
-                    break;
-                case NAME_CHANGE:
-                    this.changeName(tcpMessage);
-                    break;
-                case KEYBOARD_SHOW:
-                    this.setKeyboard();
-                    break;
-                case KEYBOARD_HIDE:
-                    this.clearKeyboard();
-                    break;
-                default:
-                    this.sendTCPMessage(tcpMessage);
-                    break;
-            }
+        switch (tcpMessage.getType()) {
+            case DISCONNECT:
+                this.disconnectMouse();
+                break;
+            case NAME_CHANGE:
+                this.changeName(tcpMessage);
+                break;
+            case KEYBOARD_SHOW:
+                this.setKeyboard();
+                break;
+            case KEYBOARD_HIDE:
+                this.clearKeyboard();
+                break;
+            default:
+                this.sendTCPMessage(tcpMessage);
+                break;
+        }
     }
 
     private void clearKeyboard() {
@@ -212,7 +211,6 @@ public class Mouse extends Thread implements IMouse{
     }
 
     private void setKeyboard() {
-        System.out.println("KEYghhffgddggdfgdd");
         this.keyboardMessageBuffer = new KeyboardMessageBuffer();
         this.keyboard = new Keyboard(this.keyboardMessageBuffer);
         this.keyboard.start();
@@ -263,7 +261,6 @@ public class Mouse extends Thread implements IMouse{
         this.keyboard.interrupt();
         this.keyboard = null;
     }
-
 
 
 }

@@ -15,7 +15,7 @@ public class TCPServerConfig {
     }
 
     public static TCPServerConfig getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new TCPServerConfig();
         }
         return instance;
@@ -30,7 +30,7 @@ public class TCPServerConfig {
 
     }
 
-    private String getHostName() throws UnknownHostException{
-        return  InetAddress.getLocalHost().getHostName();
+    private String getHostName() throws UnknownHostException {
+        return InetAddress.getLocalHost().getHostName();
     }
 }

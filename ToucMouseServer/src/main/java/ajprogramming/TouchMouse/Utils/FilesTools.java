@@ -2,7 +2,6 @@ package ajprogramming.TouchMouse.Utils;
 
 import ajprogramming.TouchMouse.AppConfig;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,7 +10,8 @@ import java.util.List;
 
 public class FilesTools {
     private final AppConfig appConfig;
-    private String logFileName = "log";
+    private final String logFileName = "log";
+
     public FilesTools() {
         this.appConfig = AppConfig.getInstance();
     }
@@ -29,7 +29,7 @@ public class FilesTools {
     public void saveLog(List<String> data) {
         try {
             if (Files.exists(Path.of(this.appConfig.getAppDataPath(), this.logFileName))) {
-                Files.write(Path.of(this.appConfig.getAppDataPath(), this.logFileName),data, StandardOpenOption.APPEND
+                Files.write(Path.of(this.appConfig.getAppDataPath(), this.logFileName), data, StandardOpenOption.APPEND
 
                 );
             }

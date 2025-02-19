@@ -11,12 +11,12 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 public class AppConfig {
+    private static AppConfig instance;
     private final String appName = "ToucMouse";
     private final String appDataPath = System.getProperty("user.home") + "\\AppData\\Local\\TouchMouse";
     private final String appDataPathLinux = System.getProperty("user.home") + "/.local/share/TouchMouse";
     private XML xml;
     private Platform platform;
-    private static AppConfig instance;
 
     private AppConfig() {
 
@@ -33,16 +33,21 @@ public class AppConfig {
         }
         return AppConfig.instance;
     }
+
     public Platform getPlatform() {
         return this.platform;
     }
-    public String getAppName() {return this.appName;}
+
+    public String getAppName() {
+        return this.appName;
+    }
+
     public HashMap<String, IMouse> getMice() {
         return this.xml.getMice();
     }
 
     public String getAppDataPath() {
-        return  this.platform.getPlatform() == EPlatform.WINDOWS ? this.appDataPath : this.appDataPathLinux;
+        return this.platform.getPlatform() == EPlatform.WINDOWS ? this.appDataPath : this.appDataPathLinux;
     }
 
     private void initialize() {
@@ -54,6 +59,7 @@ public class AppConfig {
             throw new RuntimeException(e);
         }
     }
+
     private void initializeXML() {
         this.xml = new XML();
 

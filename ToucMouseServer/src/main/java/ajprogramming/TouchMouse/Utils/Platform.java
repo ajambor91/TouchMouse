@@ -15,11 +15,11 @@ public class Platform {
 
     private void initialize() {
         String osName = System.getProperty("os.name");
-        if (osName.toLowerCase().startsWith(EPlatform.WINDOWS.getOs()) ) {
+        if (osName.toLowerCase().startsWith(EPlatform.WINDOWS.getOs())) {
             this.platform = EPlatform.WINDOWS;
         } else if (osName.toLowerCase().startsWith(EPlatform.LINUX.getOs())) {
             this.platform = EPlatform.LINUX;
-        } else  {
+        } else {
             JOptionPane.showMessageDialog(null, "OS is not supporting", "OS is not supporting", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }

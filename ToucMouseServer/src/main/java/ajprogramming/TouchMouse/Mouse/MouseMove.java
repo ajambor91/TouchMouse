@@ -41,7 +41,6 @@ public class MouseMove extends Thread {
         this.loggerEx.info("Mouse move started");
 
         while (running) {
-            System.out.println("IN RUN");
             UDPMessage udpMessage = this.messageBuffer.getMessage();
             if (udpMessage != null) {
                 if (udpMessage.getType() == UDPMessageTypeEnum.MOVE) {

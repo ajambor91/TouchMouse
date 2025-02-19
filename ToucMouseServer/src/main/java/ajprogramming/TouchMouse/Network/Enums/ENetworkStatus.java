@@ -7,6 +7,11 @@ public enum ENetworkStatus {
 
     private final String status;
 
-    ENetworkStatus(String status) {this.status = status;}
-    public String ENetworkStatus() {return this.status;}
+    ENetworkStatus(String status) {
+        this.status = status;
+    }
+
+    public String ENetworkStatus() {
+        return this.status;
+    }
 }

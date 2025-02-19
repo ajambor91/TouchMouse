@@ -11,11 +11,12 @@ public class Touch implements UDPAction {
 
     public EMouseTouchType getClickType() {
         return this.clickType;
-    };
+    }
 
     public void setClickType(EMouseTouchType clickType) {
         this.clickType = clickType;
     }
+
     public EMouseTouch getClick() {
         return this.click;
     }

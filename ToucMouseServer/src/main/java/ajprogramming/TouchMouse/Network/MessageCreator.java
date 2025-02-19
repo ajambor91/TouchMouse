@@ -9,6 +9,7 @@ import ajprogramming.TouchMouse.Network.Messages.BroadcastMessage;
 import ajprogramming.TouchMouse.Network.Messages.INetworkMessage;
 import ajprogramming.TouchMouse.Network.Messages.TCPMessage;
 import ajprogramming.TouchMouse.Network.Messages.UDPMessage;
+import ajprogramming.TouchMouse.Utils.LoggerEx;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,6 +23,7 @@ public class MessageCreator {
     public MessageCreator() {
         this.objectMapper = new ObjectMapper();
     }
+
     public MessageCreator(String mouseId, String sessionId, String hostAddress, String hostName, String appName, TCPMessageTypeEnum tcpMessageTypeEnum) {
         this.objectMapper = new ObjectMapper();
 
@@ -55,7 +57,6 @@ public class MessageCreator {
         this.objectMapper = new ObjectMapper();
         this.initializeIncomingMessage(incomingMessage, messageTypes);
     }
-
 
 
     private void initializeIncomingMessage(String incomingMessage, MessageTypes messageTypes) {
@@ -119,10 +120,11 @@ public class MessageCreator {
             return this.objectMapper.writeValueAsString(this.INetworkMessage);
 
         } catch (JsonProcessingException e) {
-            System.out.println("JSON Cannot convert message to JSON");
+            LoggerEx.getLogger(this.getClass().getName()).warning("Cannot JSON serialize: ", e.getMessage());
         }
-        return "";
+        return null;
     }
+
     public byte[] bytefyMessage() {
         return this.jsonfyMessage().getBytes(StandardCharsets.UTF_8);
     }

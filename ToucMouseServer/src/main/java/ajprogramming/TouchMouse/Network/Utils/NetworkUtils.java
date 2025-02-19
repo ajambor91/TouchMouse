@@ -11,7 +11,7 @@ import java.util.Objects;
 public class NetworkUtils {
 
     public static String getHostname() throws UnknownHostException {
-            return InetAddress.getLocalHost().getHostName();
+        return InetAddress.getLocalHost().getHostName();
 
     }
 

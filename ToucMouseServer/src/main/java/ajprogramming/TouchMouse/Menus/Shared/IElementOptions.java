@@ -2,7 +2,7 @@ package ajprogramming.TouchMouse.Menus.Shared;
 
 
 public interface IElementOptions {
-     int getWidth();
+    int getWidth();
 
-     int getHeight();
+    int getHeight();
 }

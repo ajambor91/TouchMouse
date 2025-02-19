@@ -15,10 +15,11 @@ import java.util.List;
 
 public class MouseHandler {
     private final IHost host;
-    private HashMap<String, IMouse> mouseHashMap;
-    private MainFrame mainFrame;
     private final LoggerEx loggerEx;
     private final XML xml;
+    private HashMap<String, IMouse> mouseHashMap;
+    private MainFrame mainFrame;
+
     public MouseHandler(IHost host) {
         this.xml = new XML();
         this.host = host;
@@ -69,7 +70,7 @@ public class MouseHandler {
         this.loggerEx.info("Reconnecting mouse", tcpMessage.getMouseId());
 
         IMouse mouse = this.mouseHashMap.get(tcpMessage.getMouseId());
-        if (mouse  != null) {
+        if (mouse != null) {
             this.loggerEx.info("Mouse reconnected", tcpMessage.getMouseId());
             this.connectMouse(tcpMessage, clientSocket);
         }
@@ -78,13 +79,10 @@ public class MouseHandler {
     }
 
     public void onAction(List<UDPMessage> message) {
-        System.out.println("IIIIIII");
 
         message.forEach(msg -> {
             Mouse mouse = (Mouse) this.mouseHashMap.get(msg.getMouseId());
-            System.out.println("IIIIIII");
             if (mouse != null) {
-                System.out.println("ZZZZZZZZZZZZZZZZ");
 
                 mouse.addMsg(msg);
             } else {
@@ -99,7 +97,7 @@ public class MouseHandler {
     public void removeMouse(IMouse mouse) {
         this.loggerEx.info("Removing mouse", mouse.getMouseID());
 
-        IMouse mouseFromMap =  this.mouseHashMap.get(mouse.getMouseID());
+        IMouse mouseFromMap = this.mouseHashMap.get(mouse.getMouseID());
         if (mouseFromMap != null) {
             this.mouseHashMap.remove(mouse.getMouseID());
             mouseFromMap.removeMouse();
@@ -107,7 +105,7 @@ public class MouseHandler {
             this.loggerEx.info("Mouse removed", mouse.getMouseID());
 
             this.refreshMouseList();
-        } else  {
+        } else {
             this.loggerEx.info("Cannot find mouse to remove", mouse.getMouseID());
 
         }
@@ -116,7 +114,7 @@ public class MouseHandler {
     public void disconnectMouse(IMouse mouse) {
         this.loggerEx.info("Disconnecting mouse", mouse.getMouseID());
 
-        IMouse mouseFromMap =  this.mouseHashMap.get(mouse.getMouseID());
+        IMouse mouseFromMap = this.mouseHashMap.get(mouse.getMouseID());
         if (mouseFromMap != null) {
             if (mouseFromMap instanceof Mouse) {
                 ((Mouse) mouseFromMap).disconnectMouse();

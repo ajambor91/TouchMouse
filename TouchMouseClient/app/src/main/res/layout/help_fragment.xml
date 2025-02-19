@@ -66,6 +66,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rmb_description" />
+
+    <TextView
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/help_keyboard"
+        android:textSize="17sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/keyboard" />
+    <TextView
+        android:id="@+id/help_keyboard_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/to_enter_text_swipe_up_from_the_bottom_edge_of_the_screen_to_reveal_the_keyboard_you_can_then_begin_typing" />
     <Button
         android:id="@+id/help_back_btn"
         android:background="@drawable/button"

@@ -4,9 +4,11 @@ public enum EPlatform {
     WINDOWS("windows"),
     LINUX("linux");
 
-    private String os;
+    private final String os;
 
-    EPlatform(String os) {this.os = os;}
+    EPlatform(String os) {
+        this.os = os;
+    }
 
     public String getOs() {
         return this.os;

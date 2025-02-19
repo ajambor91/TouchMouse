@@ -2,8 +2,9 @@ package ajprogramming.TouchMouse.Menus.Shared;
 
 import javax.swing.*;
 
-public class DefaultScrollPane extends JScrollPane{
+public class DefaultScrollPane extends JScrollPane {
     private final DefaultPaneOptions defaultPaneOptions;
+
     public DefaultScrollPane(DefaultPane pane) {
         super(pane);
         this.defaultPaneOptions = new DefaultPaneOptions();

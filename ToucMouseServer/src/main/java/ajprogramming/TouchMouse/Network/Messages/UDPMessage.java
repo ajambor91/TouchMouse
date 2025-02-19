@@ -18,7 +18,9 @@ public class UDPMessage implements INetworkMessage {
     private String hostAddress;
     private UDPAction action;
     private String hostname;
-    public UDPMessage() {}
+
+    public UDPMessage() {
+    }
 
     public String getMouseId() {
         return this.mouseId;
@@ -58,15 +60,16 @@ public class UDPMessage implements INetworkMessage {
         return this.type;
     }
 
-    public void setSend(boolean send) {
-        this.isSend = true;
+    public void setType(UDPMessageTypeEnum type) {
+        this.type = type;
     }
 
     public boolean getSend() {
         return this.isSend;
     }
-    public void setType(UDPMessageTypeEnum type) {
-        this.type = type;
+
+    public void setSend(boolean send) {
+        this.isSend = true;
     }
 
     public UDPAction getAction() {
@@ -93,11 +96,11 @@ public class UDPMessage implements INetworkMessage {
         this.mouseName = mouseName;
     }
 
-    public void setMouseAddress(String mouseAddress) {
-        this.mouseAddress = mouseAddress;
-    }
-
     public String getMouseAddress() {
         return this.mouseAddress;
+    }
+
+    public void setMouseAddress(String mouseAddress) {
+        this.mouseAddress = mouseAddress;
     }
 }

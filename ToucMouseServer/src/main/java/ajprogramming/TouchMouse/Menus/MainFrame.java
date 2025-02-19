@@ -14,7 +14,6 @@ import java.awt.event.WindowAdapter;
 import java.util.Objects;
 
 /**
- *
  * @author Adam
  */
 public class MainFrame extends JFrame {
@@ -24,8 +23,9 @@ public class MainFrame extends JFrame {
     private final MouseListPane mouseListPane;
     private final MouseHandler mouseHandler;
     private final MainFrameOptions mainFrameOptions;
-    private OptionsDIalog optionsDIalog;
     private final LoggerEx loggerEx;
+    private OptionsDIalog optionsDIalog;
+
     private MainFrame() {
         this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
         this.loggerEx.info("Initialized app main window");
@@ -93,7 +93,11 @@ public class MainFrame extends JFrame {
     public void onDisconnect(IMouse mouse) {
         this.mouseHandler.disconnectMouse(mouse);
     }
-    public void onRemove(IMouse mouse) {this.mouseHandler.removeMouse(mouse);}
+
+    public void onRemove(IMouse mouse) {
+        this.mouseHandler.removeMouse(mouse);
+    }
+
     private void setupWindow() {
 
         this.loggerEx.info("Set main window option");

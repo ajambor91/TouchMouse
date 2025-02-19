@@ -12,15 +12,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-public class TCPService extends Thread{
+
+public class TCPService extends Thread {
+    private final LoggerEx loggerEx;
+    private final TCPServerConfig config;
+    private final MouseHandler mouseHandler;
     private volatile boolean running = true;
     private boolean forceDisconnected = false;
     private Socket socket;
-    private final LoggerEx loggerEx;
     private ServerSocket serverSocket;
-    private final TCPServerConfig config;
-    private final MouseHandler mouseHandler;
-    public TCPService(MouseHandler mouseHandler){
+
+    public TCPService(MouseHandler mouseHandler) {
         this.mouseHandler = mouseHandler;
         this.config = TCPServerConfig.getInstance();
         this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
@@ -32,11 +34,11 @@ public class TCPService extends Thread{
     public void run() {
         this.loggerEx.info("TCP service started");
 
-        try  {
+        try {
 
             this.serverSocket = new ServerSocket(this.config.PORT);
             while (running) {
-                this.socket= serverSocket.accept();
+                this.socket = serverSocket.accept();
                 InputStream inputStream = this.socket.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 MessageCreator messageCreator = new MessageCreator(reader.readLine(), MessageTypes.TCP);

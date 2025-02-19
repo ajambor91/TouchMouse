@@ -8,6 +8,10 @@ public class BroadcastMessage implements INetworkMessage {
     private BroadcastMessageTypeEnum type;
     private String hostAddress;
     private String appName;
+
+    public BroadcastMessage() {
+    }
+
     public String getMouseId() {
         return this.mouseId;
     }
@@ -26,7 +30,6 @@ public class BroadcastMessage implements INetworkMessage {
 
     }
 
-
     public String getHostAddress() {
         return this.hostAddress;
     }
@@ -42,8 +45,6 @@ public class BroadcastMessage implements INetworkMessage {
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
-
-    public BroadcastMessage(){}
 
     public BroadcastMessageTypeEnum getType() {
         return this.type;
@@ -69,11 +70,11 @@ public class BroadcastMessage implements INetworkMessage {
 
     }
 
-    public void setMouseAddress(String mouseAddress) {
-
-    }
-
     public String getMouseAddress() {
         return null;
+    }
+
+    public void setMouseAddress(String mouseAddress) {
+
     }
 }

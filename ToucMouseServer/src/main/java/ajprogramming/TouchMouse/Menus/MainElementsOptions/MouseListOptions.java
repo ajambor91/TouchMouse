@@ -16,6 +16,7 @@ public class MouseListOptions implements IElementOptions {
     public Color getListColor() {
         return this.color;
     }
+
     public int getHeight() {
         return this.height;
     }

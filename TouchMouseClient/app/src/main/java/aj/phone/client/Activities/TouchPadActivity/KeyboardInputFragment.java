@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +19,8 @@ import javax.inject.Inject;
 
 import aj.phone.client.Core.DIModule;
 import aj.phone.client.Core.Keyboard;
+import aj.phone.client.NetworkModule.Enums.EFunctionalKey;
 import aj.phone.client.NetworkModule.Enums.TCPMessageTypeEnum;
-import aj.phone.client.NetworkModule.Message.EFunctionalKey;
 import aj.phone.client.NetworkModule.NetworkService;
 import aj.phone.client.R;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -29,13 +28,16 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class KeyboardInputFragment extends Fragment {
 
+    private final TouchpadMainFragment touchpadMainFragment;
     @Inject
     public DIModule diModule;
-
     private NetworkService networkService;
     private Keyboard keyboard;
     private EditText keyboardInput;
 
+    public KeyboardInputFragment(TouchpadMainFragment touchpadMainFragment) {
+        this.touchpadMainFragment = touchpadMainFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,17 +57,45 @@ public class KeyboardInputFragment extends Fragment {
         this.addKeyboardEvent();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        this.touchpadMainFragment.setTextState(String.valueOf(this.keyboardInput.getText()));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        keyboardInput.requestFocus();
+        InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(this.keyboardInput, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    public void setInputFocus() {
+        keyboardInput.requestFocus();
+        InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(this.keyboardInput, InputMethodManager.SHOW_IMPLICIT);
+    }
+
     private void sendKeyboardShowMessage() {
         this.networkService.setTCPMessage(TCPMessageTypeEnum.KEYBOARD_SHOW);
     }
 
     private void addKeyboardEvent() {
-        Log.d("Keayboard", "Adding keyboard events");
         keyboardInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                assert EFunctionalKey.fromKey(keyCode) != null;
-                keyboard.processKeyEvent(EFunctionalKey.fromKey(keyCode).getKeyValue());
+                EFunctionalKey keyCodeEnum = EFunctionalKey.fromKey(keyCode);
+                if (keyCodeEnum == EFunctionalKey.RTN) {
+                    keyboardInput.setText("");
+                }
+                if (keyCodeEnum != null) {
+                    keyboard.processKeyEvent(keyCodeEnum.getKeyValue());
+                } else if (
+                        EBackEvent.BACK.getEventType() == keyCode
+                ) {
+                    destroyKeyboard();
+                }
                 return true;
             }
         });
@@ -74,7 +104,6 @@ public class KeyboardInputFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -96,20 +125,18 @@ public class KeyboardInputFragment extends Fragment {
                     beforeText = s.toString();
                 }
             }
-
         });
         this.keyboardInput.post(() -> {
-            Log.d("Keyboard ", "Focusing on edit text");
-            keyboardInput.requestFocus();
-            InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(this.keyboardInput, InputMethodManager.SHOW_IMPLICIT);
-            Log.d("Keyboard ", "Keyboard view");
+            this.setInputFocus();
         });
+    }
+
+    private void destroyKeyboard() {
+        this.touchpadMainFragment.destroyTextFragment();
     }
 
     private void setKeyboardInput(View view) {
         this.keyboardInput = view.findViewById(R.id.keyboard_input);
     }
-
 
 }

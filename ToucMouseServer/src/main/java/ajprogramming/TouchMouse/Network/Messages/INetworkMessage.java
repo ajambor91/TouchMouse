@@ -2,6 +2,7 @@ package ajprogramming.TouchMouse.Network.Messages;
 
 public interface INetworkMessage {
     String getMouseId();
+
     void setMouseId(String mouseId);
 
     String getHostname();
@@ -15,15 +16,17 @@ public interface INetworkMessage {
     String getSessionId();
 
     void setSessionId(String sessionId);
-    public void setAppName(String appName);
 
-    public String getAppName();
-    public String getMouseName();
+    String getAppName();
 
-    public void setMouseName(String mouseName);
+    void setAppName(String appName);
 
-    public void setMouseAddress(String mouseAddress);
+    String getMouseName();
 
-    public String getMouseAddress();
+    void setMouseName(String mouseName);
+
+    String getMouseAddress();
+
+    void setMouseAddress(String mouseAddress);
 
 }

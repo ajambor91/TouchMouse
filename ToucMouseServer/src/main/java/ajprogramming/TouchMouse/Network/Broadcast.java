@@ -1,4 +1,3 @@
-
 package ajprogramming.TouchMouse.Network;
 
 import ajprogramming.TouchMouse.Network.Enums.BroadcastMessageTypeEnum;
@@ -10,16 +9,13 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
-public class Broadcast extends Thread{
-    private volatile boolean running = true;
+public class Broadcast extends Thread {
     private final IHost host;
     private final LoggerEx loggerEx;
+    private volatile boolean running = true;
     private BroadcastMessage broadcastMessage;
 
     public Broadcast(IHost host) {
@@ -27,8 +23,9 @@ public class Broadcast extends Thread{
         this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
         this.createBroadcastMessage();
     }
+
     @Override
-    public void run(){
+    public void run() {
         try {
             final ArrayList<String> dataToSend = new ArrayList<>();
             dataToSend.add("PhoneMouse");
@@ -39,11 +36,11 @@ public class Broadcast extends Thread{
             DatagramSocket socket = new DatagramSocket();
             MessageCreator messageCreator = new MessageCreator(this.broadcastMessage);
             while (running) {
-               InetAddress address = InetAddress.getByName(interfaces.get(i).getHostAddress());
+                InetAddress address = InetAddress.getByName(interfaces.get(i).getHostAddress());
 
                 i++;
                 if (i == length) {
-                   i = 0;
+                    i = 0;
                 }
                 socket.setBroadcast(true);
                 byte[] broadcastMsg = messageCreator.bytefyMessage();
@@ -54,7 +51,7 @@ public class Broadcast extends Thread{
                     this.wait(100);
 
                 }
-                
+
             }
         } catch (IOException | InterruptedException ex) {
             this.loggerEx.warning("Broadcast", ex.getMessage());

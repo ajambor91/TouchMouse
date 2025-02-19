@@ -7,9 +7,9 @@ import java.awt.*;
 
 public class DataTextFieldOptions implements IElementOptions {
 
-    private int width = 300;
-    private int height = 30;
-    private Color backgroundColor = new Color(64, 64, 64);
+    private final int width = 300;
+    private final int height = 30;
+    private final Color backgroundColor = new Color(64, 64, 64);
 
     public Color getBackgroundColor() {
         return this.backgroundColor;

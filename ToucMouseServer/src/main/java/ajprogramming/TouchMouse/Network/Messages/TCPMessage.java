@@ -10,6 +10,10 @@ public class TCPMessage implements INetworkMessage {
     private String hostAddress;
     private String appName;
     private String mouseName;
+
+    public TCPMessage() {
+    }
+
     public String getMouseId() {
         return this.mouseId;
     }
@@ -28,7 +32,6 @@ public class TCPMessage implements INetworkMessage {
 
     }
 
-
     public String getHostAddress() {
         return this.hostAddress;
     }
@@ -44,8 +47,6 @@ public class TCPMessage implements INetworkMessage {
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
-
-    public TCPMessage(){}
 
     public TCPMessageTypeEnum getType() {
         return this.type;
@@ -71,12 +72,11 @@ public class TCPMessage implements INetworkMessage {
         this.mouseName = mouseName;
     }
 
-    public void setMouseAddress(String mouseAddress) {
-        this.mouseAddress = mouseAddress;
-    }
-
-
     public String getMouseAddress() {
         return this.mouseAddress;
+    }
+
+    public void setMouseAddress(String mouseAddress) {
+        this.mouseAddress = mouseAddress;
     }
 }

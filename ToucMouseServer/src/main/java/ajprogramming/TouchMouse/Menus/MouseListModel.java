@@ -7,7 +7,8 @@ import java.util.HashMap;
 
 public class MouseListModel {
     private IMouse[] data;
-    private LoggerEx loggerEx;
+    private final LoggerEx loggerEx;
+
     public MouseListModel(HashMap<String, IMouse> map) {
         this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
         this.loggerEx.info("Initializing MouseListModel");

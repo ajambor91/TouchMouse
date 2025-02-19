@@ -11,6 +11,7 @@ public class OptionsDIalog extends JDialog {
     private final OptionsDialogOptions optionsDialog;
     private final MainFrame mainFrame;
     private final MainOptionsPane mainOptionsPane;
+
     public OptionsDIalog(MainFrame mainFrame) {
         super(mainFrame, "Info");
         this.mainFrame = mainFrame;

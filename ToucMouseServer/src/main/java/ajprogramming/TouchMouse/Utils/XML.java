@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class XML {
 
     private final LoggerEx loggerEx;
+
     public XML() {
         this.loggerEx = LoggerEx.getLogger(this.getClass().getName());
         this.initialize();
@@ -80,7 +81,6 @@ public class XML {
             throw new RuntimeException(e);
         }
     }
-
 
 
 }
